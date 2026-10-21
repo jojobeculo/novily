@@ -1,21 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { ComponentPropsWithoutRef, MouseEvent } from "react";
 import { useSmoothScroll } from "@/components/layout/smooth-scroll";
 
 type SectionLinkProps = ComponentPropsWithoutRef<typeof Link> & { href: string };
 
-const trimSlash = (path: string) => path.replace(/\/+$/, "") || "/";
-
 /**
  * A Link that glides to its `#section` when the section is on the current
- * page, also when the URL already holds that hash. From another page, it
- * navigates as a normal Link.
+ * page, also when the URL already holds that hash. From another page (no such
+ * section in the document), it navigates as a normal Link. The check looks at
+ * the document, not the URL, so it holds under any base path or host.
  */
 export function SectionLink({ href, onClick, ...props }: SectionLinkProps) {
-  const pathname = usePathname();
   const { scrollTo } = useSmoothScroll();
 
   function handleClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -23,8 +20,8 @@ export function SectionLink({ href, onClick, ...props }: SectionLinkProps) {
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
 
-    const [path, hash] = href.split("#");
-    if (!hash || trimSlash(path || "/") !== trimSlash(pathname)) return;
+    const hash = href.split("#")[1];
+    if (!hash) return;
     const target = document.getElementById(hash);
     if (!target) return;
 

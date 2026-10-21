@@ -17,12 +17,16 @@ import { easeInOutQuart, easeOutExpo } from "@/lib/motion";
 import { navigation, siteConfig } from "@/lib/site";
 import { useSmoothScroll } from "./smooth-scroll";
 
-/** Tracks which home page section sits in the middle of the viewport. */
-function useActiveSection(enabled: boolean) {
-  const [active, setActive] = useState<string>("accueil");
+/**
+ * Tracks which home page section sits in the middle of the viewport. On a page
+ * without these sections (legal notice), nothing is active.
+ */
+function useActiveSection() {
+  const [active, setActive] = useState<string | null>(null);
+  // The navbar outlives page changes: observe again the sections of each new page.
+  const pathname = usePathname();
 
   useEffect(() => {
-    if (!enabled) return;
     const observer = new IntersectionObserver(
       (entries) => {
         for (const entry of entries) {
@@ -35,10 +39,13 @@ function useActiveSection(enabled: boolean) {
       const section = document.getElementById(id);
       if (section) observer.observe(section);
     }
-    return () => observer.disconnect();
-  }, [enabled]);
+    return () => {
+      observer.disconnect();
+      setActive(null);
+    };
+  }, [pathname]);
 
-  return enabled ? active : null;
+  return active;
 }
 
 export function Navbar() {
@@ -47,7 +54,7 @@ export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const active = useActiveSection(usePathname() === "/");
+  const active = useActiveSection();
   const { setLocked, isAutoScrolling } = useSmoothScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => {
