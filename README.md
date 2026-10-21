@@ -102,6 +102,21 @@ Une flèche fine aux couleurs du site (pointe crème, base pervenche), en CSS pu
 boutons, elle se remplit de la couleur d'accent. Les champs de texte gardent le curseur texte, et
 les écrans tactiles ne sont pas concernés.
 
+## Logo
+
+Le logo est le motif d'orbite du hero, épuré : trois anneaux concentriques, l'orbite inclinée et
+son satellite pervenche, posé là où l'orbite touche l'anneau extérieur. Fichiers vectoriels dans
+`public/` (viewBox 64 × 64, sans taille fixe) :
+
+| Fichier | Usage |
+|---|---|
+| `logo-noveo.svg` | Couleurs de la marque (lignes crème), sur le noir du site |
+| `logo-noveo-fond-sombre.svg` | Lignes blanches, sur tout fond sombre ou photo foncée |
+| `logo-noveo-fond-clair.svg` | Lignes noires et pervenche plus soutenu, sur fond clair |
+
+Dans le site, `LogoMark` (`src/components/ui/logo-mark.tsx`) dessine la même géométrie en ligne,
+dans la couleur du texte : modifiez les fichiers et le composant ensemble.
+
 ## Charte
 
 | Jeton | Valeur | Usage |

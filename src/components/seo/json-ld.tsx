@@ -12,7 +12,7 @@ const graph = {
       name: siteConfig.name,
       legalName: siteConfig.legalName,
       url: siteConfig.url,
-      logo: `${siteConfig.url}/icon.svg`,
+      logo: `${siteConfig.url}/logo-noveo-fond-clair.svg`,
       image: `${siteConfig.url}/opengraph-image.jpg`,
       description: siteConfig.description,
       email: siteConfig.email,
