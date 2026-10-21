@@ -1,0 +1,209 @@
+"use client";
+
+import { AnimatePresence, m } from "framer-motion";
+import { useState, type FormEvent } from "react";
+import { Button } from "@/components/ui/button";
+import { Magnetic } from "@/components/ui/magnetic";
+import { parseContact, projectTypes, type ContactErrors } from "@/lib/contact";
+import { easeOutExpo } from "@/lib/motion";
+import { siteConfig } from "@/lib/site";
+
+type Status = "idle" | "sending" | "sent" | "error";
+
+type FieldProps = {
+  name: "name" | "email" | "company" | "message";
+  label: string;
+  error?: string;
+  type?: string;
+  autoComplete?: string;
+  multiline?: boolean;
+  optional?: boolean;
+};
+
+function Field({ name, label, error, type = "text", autoComplete, multiline, optional }: FieldProps) {
+  const id = `contact-${name}`;
+  const errorId = `${id}-error`;
+  const inputClass =
+    "peer w-full resize-none border-0 border-b border-line bg-transparent pt-8 pb-3 text-lg text-cream outline-none transition-colors duration-500 placeholder:text-transparent focus:border-transparent focus-visible:outline-none";
+
+  return (
+    <div className="relative">
+      {multiline ? (
+        <textarea
+          id={id}
+          name={name}
+          rows={4}
+          placeholder={label}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
+          className={inputClass}
+        />
+      ) : (
+        <input
+          id={id}
+          name={name}
+          type={type}
+          autoComplete={autoComplete}
+          placeholder={label}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={error ? errorId : undefined}
+          className={inputClass}
+        />
+      )}
+      {/* Label floats up when the field has focus or content. */}
+      <label
+        htmlFor={id}
+        className="pointer-events-none absolute top-1 left-0 origin-left text-xs tracking-[0.14em] text-faint uppercase transition-all duration-500 ease-out-expo peer-placeholder-shown:top-8 peer-placeholder-shown:text-lg peer-placeholder-shown:tracking-normal peer-placeholder-shown:normal-case peer-focus:top-1 peer-focus:text-xs peer-focus:tracking-[0.14em] peer-focus:uppercase"
+      >
+        {label}
+        {optional ? <span className="ml-2">(facultatif)</span> : null}
+      </label>
+      <span
+        aria-hidden
+        className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-cream transition-transform duration-700 ease-out-expo peer-focus:scale-x-100"
+      />
+      {error ? (
+        <p id={errorId} className="mt-2 text-sm text-accent">
+          {error}
+        </p>
+      ) : null}
+    </div>
+  );
+}
+
+export function ContactForm() {
+  const [status, setStatus] = useState<Status>("idle");
+  const [errors, setErrors] = useState<ContactErrors>({});
+  const [projectType, setProjectType] = useState<string>("");
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = event.currentTarget;
+    const values = Object.fromEntries(new FormData(form));
+    const parsed = parseContact({ ...values, projectType });
+    if (!parsed.ok) {
+      setErrors(parsed.errors);
+      return;
+    }
+    setErrors({});
+    setStatus("sending");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...parsed.data, website: values.website }),
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      form.reset();
+      setProjectType("");
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      {status === "sent" ? (
+        <m.div
+          key="sent"
+          role="status"
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: easeOutExpo }}
+          className="flex min-h-[28rem] flex-col justify-center border-t border-line pt-10"
+        >
+          <p className="font-serif text-title font-light">
+            Merci. <em className="text-accent">Votre message est bien arrivé.</em>
+          </p>
+          <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
+            Nous revenons vers vous sous 24 heures ouvrées pour échanger sur votre projet.
+          </p>
+        </m.div>
+      ) : (
+        <m.form
+          key="form"
+          noValidate
+          onSubmit={handleSubmit}
+          exit={{ opacity: 0, y: -16 }}
+          transition={{ duration: 0.5, ease: easeOutExpo }}
+          className="flex flex-col gap-8"
+        >
+          <div className="grid gap-8 md:grid-cols-2 md:gap-10">
+            <Field name="name" label="Votre nom" autoComplete="name" error={errors.name} />
+            <Field
+              name="email"
+              type="email"
+              label="Votre e-mail"
+              autoComplete="email"
+              error={errors.email}
+            />
+          </div>
+          <Field
+            name="company"
+            label="Entreprise"
+            autoComplete="organization"
+            optional
+            error={errors.company}
+          />
+
+          <fieldset className="pt-4">
+            <legend className="text-xs tracking-[0.14em] text-faint uppercase">
+              Type de projet
+            </legend>
+            <div className="mt-5 flex flex-wrap gap-2">
+              {projectTypes.map((type) => {
+                const active = projectType === type;
+                return (
+                  <button
+                    key={type}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setProjectType(active ? "" : type)}
+                    className={`rounded-full border px-4 py-2 text-sm transition-colors duration-500 ${
+                      active
+                        ? "border-cream bg-cream text-ink"
+                        : "border-line text-muted hover:border-line-strong hover:text-cream"
+                    }`}
+                  >
+                    {type}
+                  </button>
+                );
+              })}
+            </div>
+          </fieldset>
+
+          <Field name="message" label="Parlez-nous de votre projet" multiline error={errors.message} />
+
+          {/* Honeypot field, hidden from people and assistive technology. */}
+          <div aria-hidden className="absolute -left-[9999px] h-px w-px overflow-hidden">
+            <label htmlFor="contact-website">Site web</label>
+            <input id="contact-website" name="website" type="text" tabIndex={-1} autoComplete="off" />
+          </div>
+
+          <div className="flex flex-col gap-6 pt-4 sm:flex-row sm:items-center sm:justify-between">
+            <p className="max-w-xs text-xs leading-relaxed text-faint">
+              Vos données servent uniquement à vous répondre. Elles ne sont jamais partagées.
+            </p>
+            <Magnetic>
+              <Button type="submit" arrow disabled={status === "sending"}>
+                {status === "sending" ? "Envoi en cours…" : "Envoyer le message"}
+              </Button>
+            </Magnetic>
+          </div>
+
+          {status === "error" ? (
+            <p role="alert" className="text-sm text-accent">
+              L&apos;envoi n&apos;a pas abouti. Écrivez-nous directement à{" "}
+              <a href={`mailto:${siteConfig.email}`} className="underline underline-offset-4">
+                {siteConfig.email}
+              </a>
+              .
+            </p>
+          ) : null}
+        </m.form>
+      )}
+    </AnimatePresence>
+  );
+}

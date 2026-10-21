@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  /* Palette — monochrome warm, one periwinkle accent used sparingly */
+  --color-ink: #000000;
+  --color-cream: #f4efd4;
+  --color-accent: #84acfb;
+  --color-ash: #626055;
+  --color-surface: #0d0d0c;
+  --color-line: rgb(244 239 212 / 0.14);
+  --color-line-strong: rgb(244 239 212 / 0.32);
+  --color-muted: rgb(244 239 212 / 0.62);
+  --color-faint: rgb(244 239 212 / 0.52);
+
+  /* Typography */
+  --font-serif: var(--font-plex-serif), ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --text-eyebrow: 0.75rem;
+  --text-eyebrow--line-height: 1;
+  --text-eyebrow--letter-spacing: 0.18em;
+
+  --text-display: clamp(2.75rem, 1.4rem + 6.4vw, 8rem);
+  --text-display--line-height: 1;
+  --text-display--letter-spacing: -0.025em;
+
+  --text-headline: clamp(2.25rem, 1.5rem + 3.6vw, 5rem);
+  --text-headline--line-height: 1.04;
+  --text-headline--letter-spacing: -0.02em;
+
+  --text-title: clamp(1.625rem, 1.3rem + 1.3vw, 2.5rem);
+  --text-title--line-height: 1.1;
+  --text-title--letter-spacing: -0.01em;
+
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
+  --text-lead--line-height: 1.6;
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-quart: cubic-bezier(0.76, 0, 0.24, 1);
+
+  --radius-card: 14px;
+}
+
+/* First-paint entrances run in CSS so the hero never waits for hydration. */
+@keyframes word-in {
+  from {
+    transform: translateY(110%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scroll-cue {
+  0% {
+    transform: translateY(-100%);
+  }
+  50% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(100%);
+  }
+}
+
+@layer base {
+  html {
+    background: var(--color-ink);
+    color: var(--color-cream);
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    font-family: var(--font-sans);
+    font-weight: 300;
+    background: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-accent);
+    outline-offset: 4px;
+    border-radius: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 0.6rem + 3.2vw, 3.5rem);
+}
+
+@utility section-space {
+  padding-block: clamp(6rem, 4rem + 9vw, 12rem);
+}
