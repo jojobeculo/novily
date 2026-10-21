@@ -69,14 +69,10 @@ export function Hero() {
             style={delay(0.72)}
             className={`flex flex-wrap items-center gap-3 md:col-span-7 md:justify-end ${enter}`}
           >
+            {/* One call to action across the site: every conversion button says the same thing. */}
             <Magnetic>
-              <Button href="/#services" variant="light" arrow>
-                Découvrir nos services
-              </Button>
-            </Magnetic>
-            <Magnetic>
-              <Button href="/#contact" variant="outline">
-                Prendre rendez-vous
+              <Button href="/#contact" variant="light" arrow>
+                Parlons de votre projet
               </Button>
             </Magnetic>
           </div>

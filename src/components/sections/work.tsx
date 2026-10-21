@@ -110,7 +110,7 @@ export function Work() {
             Votre projet pourrait être le prochain. Parlons de vos objectifs.
           </p>
           <Button href="/#contact" variant="light" arrow className="self-start sm:self-auto">
-            Démarrer un projet
+            Parlons de votre projet
           </Button>
         </Reveal>
       </div>
