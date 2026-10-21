@@ -15,6 +15,8 @@ export type Service = {
   deliverables: readonly string[];
   /** Preselected in the contact form when the visitor clicks the card. */
   projectType?: ProjectType;
+  /** Slug of the project in `projects` whose image illustrates the service. */
+  showcase?: string;
   upcoming?: boolean;
 };
 
@@ -26,6 +28,7 @@ export const services: readonly Service[] = [
       "Créer une présence en ligne pour représenter votre entreprise et convertir davantage de visiteurs en clients.",
     deliverables: ["Direction artistique", "UX / UI", "SEO", "CMS"],
     projectType: "Site vitrine",
+    showcase: "atelier-linea",
   },
   {
     id: "e-commerce",
@@ -34,6 +37,7 @@ export const services: readonly Service[] = [
       "Des boutiques en ligne performantes pensées pour maximiser les ventes et offrir une expérience d'achat exceptionnelle.",
     deliverables: ["Shopify", "Headless", "Paiement", "Conversion"],
     projectType: "E-commerce",
+    showcase: "seve",
   },
   {
     id: "conceptuel",
@@ -42,6 +46,7 @@ export const services: readonly Service[] = [
       "Des expériences digitales créatives pour des marques, artistes ou événements.",
     deliverables: ["Storytelling", "Motion design", "WebGL", "Événementiel"],
     projectType: "Site conceptuel",
+    showcase: "orbe-festival",
   },
   {
     id: "applications",

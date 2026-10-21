@@ -41,16 +41,19 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const [api] = useState<SmoothScroll>(() => ({
     scrollTo(target) {
       const lenis = lenisRef.current;
+      const top = typeof target === "number" ? target : target.getBoundingClientRect().top + window.scrollY;
       if (!lenis) {
-        const top = typeof target === "number" ? target : target.getBoundingClientRect().top + window.scrollY;
         window.scrollTo({ top, behavior: "auto" });
         return;
       }
       // A link in the mobile menu scrolls as the menu closes: release the lock first,
       // because a later start() would reset the glide.
       if (lenis.isStopped) lenis.start();
+      // A native scroll (focus, find in page) can leave Lenis on a stale position, and a
+      // glide would then start from it. Resync on the real position first.
+      lenis.scrollTo(window.scrollY, { immediate: true });
       autoRef.current = true;
-      lenis.scrollTo(target, { duration: GLIDE_SECONDS, easing: easeInOutCubic });
+      lenis.scrollTo(top, { duration: GLIDE_SECONDS, easing: easeInOutCubic });
       // A timer, not onComplete: a wheel event can cut the glide short and skip onComplete.
       window.setTimeout(() => {
         autoRef.current = false;

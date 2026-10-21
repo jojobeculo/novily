@@ -130,3 +130,49 @@
 @utility section-space {
   padding-block: clamp(7.5rem, 5rem + 10vw, 15rem);
 }
+
+/*
+ * Services: 3D scroll stage (src/components/sections/services-showcase.tsx).
+ * Prefixed "services-" so nothing else on the site is affected.
+ */
+
+/* Tall wrapper: its height sets how much scrolling each service takes. */
+.services-runway {
+  --step: 90vh;
+  position: relative;
+  height: calc(100vh + (var(--steps) * var(--step)));
+  height: calc(100svh + (var(--steps) * var(--step)));
+}
+
+/* Pinned to the viewport while the runway scrolls past. */
+.services-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: clip;
+}
+
+/* Camera and shared 3D space: panels sort by depth, not by DOM order. */
+.services-track {
+  perspective: 1800px;
+  perspective-origin: 50% -20%;
+  transform-style: preserve-3d;
+}
+
+/* Panels tilt back around their bottom edge, like a page laid down. */
+.services-panel {
+  transform-origin: 50% 100%;
+  backface-visibility: hidden;
+  will-change: transform, opacity;
+}
+
+@media (max-width: 1023px) {
+  .services-runway {
+    --step: 80vh;
+  }
+
+  .services-track {
+    perspective: 1400px;
+  }
+}
