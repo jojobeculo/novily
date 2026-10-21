@@ -97,7 +97,7 @@ export function Footer({ year }: { year: number }) {
         transition={{ duration: 1.6, ease: easeOutExpo }}
         className="pointer-events-none text-center font-serif text-[27vw] leading-[0.8] font-light tracking-[-0.04em] text-cream/[0.06] select-none"
       >
-        Novily
+        Novéo
       </m.p>
     </footer>
   );

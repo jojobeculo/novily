@@ -2,7 +2,7 @@ export const projectTypes = ["Site vitrine", "E-commerce", "Site conceptuel", "A
 export type ProjectType = (typeof projectTypes)[number];
 
 /** Window event that preselects a project type in the contact form. */
-export const PROJECT_TYPE_EVENT = "novily:project-type";
+export const PROJECT_TYPE_EVENT = "noveo:project-type";
 
 export type ContactRequest = {
   name: string;

@@ -60,7 +60,7 @@ export function Hero() {
         <div className="mt-14 grid gap-10 border-t border-line pt-10 md:mt-20 md:grid-cols-12 md:items-end md:gap-6">
           <div className={`md:col-span-5 ${enter}`} style={delay(0.6)}>
             <p className="max-w-md text-lead text-muted">
-              Novily imagine et développe des sites web élégants, rapides et pensés pour
+              Novéo imagine et développe des sites web élégants, rapides et pensés pour
               transformer vos visiteurs en clients.
             </p>
           </div>

@@ -6,10 +6,10 @@ export function Logo({ className, onClick }: { className?: string; onClick?: () 
     <SectionLink
       href="/#accueil"
       onClick={onClick}
-      aria-label="Novily — retour à l'accueil"
+      aria-label="Novéo — retour à l'accueil"
       className={`inline-flex items-baseline font-serif text-[1.625rem] leading-none font-light tracking-[-0.02em] text-cream ${className ?? ""}`}
     >
-      Novily
+      Novéo
       <span aria-hidden className="text-accent">
         .
       </span>

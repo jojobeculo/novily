@@ -215,7 +215,7 @@ export const processSteps = [
 export const testimonials = [
   {
     quote:
-      "Novily a compris notre maison mieux que nous-mêmes. Le site ressemble à notre cuisine : précis, généreux, sans artifice.",
+      "Novéo a compris notre maison mieux que nous-mêmes. Le site ressemble à notre cuisine : précis, généreux, sans artifice.",
     name: "Claire Vasseur",
     role: "Fondatrice, Maison Aubrac",
   },
@@ -235,7 +235,7 @@ export const testimonials = [
 
 export const faqs = [
   {
-    question: "Combien coûte un site avec Novily ?",
+    question: "Combien coûte un site avec Novéo ?",
     answer:
       "Chaque projet est unique. Après un premier échange, nous vous remettons une proposition détaillée et un devis précis, adaptés à vos objectifs et à votre budget. Aucun frais caché.",
   },
@@ -262,6 +262,6 @@ export const faqs = [
   {
     question: "Travaillez-vous avec des entreprises partout en France ?",
     answer:
-      "Oui. Novily est un studio entièrement à distance : nous accompagnons des entreprises dans toute la France. Les échanges se font en visioconférence, par téléphone et par e-mail, avec un interlocuteur unique du premier appel à la mise en ligne.",
+      "Oui. Novéo est un studio entièrement à distance : nous accompagnons des entreprises dans toute la France. Les échanges se font en visioconférence, par téléphone et par e-mail, avec un interlocuteur unique du premier appel à la mise en ligne.",
   },
 ] as const;

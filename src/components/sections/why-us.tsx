@@ -20,7 +20,7 @@ export function WhyUs() {
             />
             <Reveal delay={0.15}>
               <p className="mt-10 max-w-md text-lead text-muted">
-                Novily est un studio indépendant, entièrement à distance, qui accompagne des
+                Novéo est un studio indépendant, entièrement à distance, qui accompagne des
                 entreprises partout en France. Notre conviction : un site web doit être aussi beau
                 qu&apos;efficace. Nous travaillons avec peu de clients à la fois, pour donner à
                 chacun toute notre attention.

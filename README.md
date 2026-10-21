@@ -1,6 +1,6 @@
-# Novily — site du studio
+# Novéo — site du studio
 
-Site vitrine du studio digital Novily. Une seule page éditoriale (Hero, Services, Pourquoi nous,
+Site vitrine du studio digital Novéo. Une seule page éditoriale (Hero, Services, Pourquoi nous,
 Réalisations, Méthode, Témoignages, FAQ, Contact) et une page de mentions légales.
 
 ## Stack
