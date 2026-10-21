@@ -55,7 +55,7 @@ src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
     mentions-legales/
   components/
-    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis), CustomCursor
+    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis)
     sections/          une section de la page d'accueil par fichier ; services-showcase.tsx
                        porte la scène 3D des services
     ui/                briques réutilisables : Button, SectionLink, TextReveal, Reveal,
@@ -97,9 +97,10 @@ suit leur nombre. `showcase` choisit la réalisation qui illustre le service. Su
 
 ## Curseur
 
-Le curseur personnalisé (`custom-cursor.tsx`, styles `custom-cursor-*`) n'apparaît qu'avec une
-vraie souris. Les écrans tactiles et « réduire les animations » gardent le curseur système, et
-les champs de texte gardent le curseur texte.
+Une flèche fine aux couleurs du site (pointe crème, base pervenche), en CSS pur à la fin de
+`globals.css` : le navigateur la dessine lui-même, sans script ni décalage. Sur les liens et les
+boutons, elle se remplit de la couleur d'accent. Les champs de texte gardent le curseur texte, et
+les écrans tactiles ne sont pas concernés.
 
 ## Charte
 
