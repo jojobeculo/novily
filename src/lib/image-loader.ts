@@ -6,7 +6,7 @@ import { siteConfig } from "./site";
  * to these widths as `<name>-<width>.webp`, and this loader picks the
  * smallest variant that covers the requested width.
  */
-const widths = [640, 1080, 1600];
+const widths = [640, 828, 1080, 1600];
 
 export default function imageLoader({ src, width }: ImageLoaderProps) {
   const variant = widths.find((w) => w >= width) ?? widths[widths.length - 1];
