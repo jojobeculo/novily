@@ -17,7 +17,7 @@ const graph = {
       description: siteConfig.description,
       email: siteConfig.email,
       areaServed: { "@type": "Country", name: "France" },
-      sameAs: siteConfig.socials.map((s) => s.href),
+      ...(siteConfig.socials.length > 0 ? { sameAs: siteConfig.socials.map((s) => s.href) } : {}),
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Services",

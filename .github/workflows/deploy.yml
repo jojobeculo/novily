@@ -46,6 +46,8 @@ jobs:
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
           # Optional: set the CONTACT_ENDPOINT repository variable (e.g. a Formspree URL).
           NEXT_PUBLIC_CONTACT_ENDPOINT: ${{ vars.CONTACT_ENDPOINT }}
+          # Optional: Google Analytics 4 measurement id (G-…). Without it, no analytics and no cookie banner.
+          NEXT_PUBLIC_GA_ID: ${{ vars.GA_ID }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v4

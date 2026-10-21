@@ -7,6 +7,8 @@ export const siteConfig = {
   basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "",
   /** Form service URL (e.g. Formspree). Without it, the form opens the visitor's e-mail app. */
   contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "",
+  /** Google Analytics 4 measurement id (G-…). Empty: no analytics, no consent banner. */
+  analyticsId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   locale: "fr_FR",
   title: "Novéo — Studio digital : sites vitrines, e-commerce et expériences web",
   description:
@@ -14,11 +16,11 @@ export const siteConfig = {
   email: "novyli.digital@gmail.com",
   /** The studio works fully remote: never tie it to a city. */
   location: "Studio 100 % à distance — partout en France",
-  socials: [
-    { label: "Instagram", href: "https://www.instagram.com/noveo.studio" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/company/noveo" },
-    { label: "Behance", href: "https://www.behance.net/noveo" },
-  ],
+  /**
+   * The studio's social profiles, e.g. { label: "Instagram", href: "https://…" }.
+   * The footer column and the JSON-LD sameAs only appear when the list is not empty.
+   */
+  socials: [] as ReadonlyArray<{ label: string; href: string }>,
 } as const;
 
 export const navigation = [

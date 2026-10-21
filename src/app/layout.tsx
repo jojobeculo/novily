@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/layout/motion-provider";
+import { CookieConsent } from "@/components/layout/cookie-consent";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll";
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <main id="contenu">{children}</main>
             <Footer year={year} />
           </SmoothScrollProvider>
+          <CookieConsent />
         </MotionProvider>
       </body>
     </html>

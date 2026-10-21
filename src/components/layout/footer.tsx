@@ -5,11 +5,20 @@ import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
 import { SectionLink } from "@/components/ui/section-link";
 import { easeOutExpo, inViewOnce } from "@/lib/motion";
+import { OPEN_CONSENT_EVENT } from "@/lib/consent";
 import { navigation, siteConfig } from "@/lib/site";
 import { useSmoothScroll } from "./smooth-scroll";
 
 const linkClass =
   "inline-block text-sm text-muted transition-[color,translate,opacity] duration-500 ease-out-expo hover:translate-x-1 hover:text-cream active:opacity-60";
+
+const bottomLinkClass = "transition-[color,opacity] hover:text-cream active:opacity-60";
+
+const legalLinks = [
+  { label: "Mentions légales", href: "/mentions-legales/" },
+  { label: "Confidentialité", href: "/politique-de-confidentialite/" },
+  { label: "CGU", href: "/cgu/" },
+];
 
 export function Footer({ year }: { year: number }) {
   const { scrollTo } = useSmoothScroll();
@@ -37,18 +46,20 @@ export function Footer({ year }: { year: number }) {
             </ul>
           </nav>
 
-          <div className="md:col-span-2">
-            <p className="text-xs tracking-[0.14em] text-faint uppercase">Réseaux</p>
-            <ul className="mt-6 flex flex-col gap-3">
-              {siteConfig.socials.map((s) => (
-                <li key={s.label}>
-                  <a href={s.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
-                    {s.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
+          {siteConfig.socials.length > 0 ? (
+            <div className="md:col-span-2">
+              <p className="text-xs tracking-[0.14em] text-faint uppercase">Réseaux</p>
+              <ul className="mt-6 flex flex-col gap-3">
+                {siteConfig.socials.map((s) => (
+                  <li key={s.label}>
+                    <a href={s.href} target="_blank" rel="noopener noreferrer" className={linkClass}>
+                      {s.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
 
           <div className="md:col-span-2">
             <p className="text-xs tracking-[0.14em] text-faint uppercase">Contact</p>
@@ -67,17 +78,28 @@ export function Footer({ year }: { year: number }) {
           <p>
             © {year} {siteConfig.legalName}. Tous droits réservés.
           </p>
-          <div className="flex items-center gap-8">
-            <Link href="/mentions-legales" className="transition-[color,opacity] hover:text-cream active:opacity-60">
-              Mentions légales
-            </Link>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-3">
+            {legalLinks.map((l) => (
+              <Link key={l.href} href={l.href} className={bottomLinkClass}>
+                {l.label}
+              </Link>
+            ))}
+            {siteConfig.analyticsId ? (
+              <button
+                type="button"
+                onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+                className={bottomLinkClass}
+              >
+                Cookies
+              </button>
+            ) : null}
             <button
               type="button"
               onClick={() => {
                 scrollTo(0);
                 window.history.replaceState(window.history.state, "", window.location.pathname);
               }}
-              className="group flex items-center gap-2 transition-[color,opacity] hover:text-cream active:opacity-60"
+              className={`group flex items-center gap-2 ${bottomLinkClass}`}
             >
               Haut de page
               <span aria-hidden className="transition-transform duration-500 ease-out-expo group-hover:-translate-y-0.5">
