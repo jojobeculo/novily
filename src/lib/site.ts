@@ -11,7 +11,7 @@ export const siteConfig = {
   title: "Novéo — Studio digital : sites vitrines, e-commerce et expériences web",
   description:
     "Novéo conçoit des sites web haut de gamme : sites vitrines, boutiques e-commerce et expériences digitales conceptuelles. Design éditorial, SEO et performance maximale.",
-  email: "bonjour@noveo.fr",
+  email: "novyli.digital@gmail.com",
   /** The studio works fully remote: never tie it to a city. */
   location: "Studio 100 % à distance — partout en France",
   socials: [
