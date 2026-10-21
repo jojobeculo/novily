@@ -3,6 +3,7 @@ import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
+import { SmoothScrollProvider } from "@/components/layout/smooth-scroll";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -37,7 +38,8 @@ export const metadata: Metadata = {
     "site vitrine",
     "site e-commerce",
     "design web haut de gamme",
-    "agence web Paris",
+    "agence web à distance",
+    "agence web France",
     "SEO",
   ],
   authors: [{ name: siteConfig.legalName, url: siteConfig.url }],
@@ -86,9 +88,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           Aller au contenu
         </a>
         <MotionProvider>
-          <Navbar />
-          <main id="contenu">{children}</main>
-          <Footer year={year} />
+          <SmoothScrollProvider>
+            <Navbar />
+            <main id="contenu">{children}</main>
+            <Footer year={year} />
+          </SmoothScrollProvider>
         </MotionProvider>
       </body>
     </html>

@@ -1,16 +1,17 @@
-import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
+import { SectionLink } from "./section-link";
 
 type Variant = "primary" | "light" | "outline";
 type Size = "sm" | "md";
 
+// active: a short press (scale down fast, release slowly) gives each click a visual answer.
 const base =
-  "group relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full font-sans font-medium whitespace-nowrap transition-[background-color,border-color,color] duration-500 ease-out-expo disabled:pointer-events-none disabled:opacity-50";
+  "group relative isolate inline-flex items-center justify-center gap-3 overflow-hidden rounded-full font-sans font-medium whitespace-nowrap transition-[background-color,border-color,color,scale] duration-500 ease-out-expo active:scale-[0.96] active:duration-150 disabled:pointer-events-none disabled:opacity-50";
 
 const variants: Record<Variant, string> = {
   primary: "bg-accent text-ink hover:bg-cream",
   light: "bg-cream text-ink hover:bg-accent",
-  outline: "border border-ash text-cream hover:border-cream",
+  outline: "border border-ash text-cream hover:border-cream hover:text-ink",
 };
 
 const sizes: Record<Size, string> = {
@@ -27,7 +28,7 @@ type CommonProps = {
 };
 
 type LinkButtonProps = CommonProps &
-  Omit<ComponentPropsWithoutRef<typeof Link>, "className" | "children"> & { href: string };
+  Omit<ComponentPropsWithoutRef<typeof SectionLink>, "className" | "children">;
 type NativeButtonProps = CommonProps &
   Omit<ComponentPropsWithoutRef<"button">, "className" | "children"> & { href?: undefined };
 
@@ -68,6 +69,13 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
   const classes = `${base} ${variants[variant]} ${sizes[size]} ${className ?? ""}`;
   const content = (
     <>
+      {variant === "outline" ? (
+        // Cream fill that rises from the bottom edge on hover.
+        <span
+          aria-hidden
+          className="absolute inset-0 -z-10 translate-y-[101%] rounded-full bg-cream transition-transform duration-700 ease-out-expo group-hover:translate-y-0"
+        />
+      ) : null}
       <RollingLabel>{children}</RollingLabel>
       {arrow ? <Arrow /> : null}
     </>
@@ -75,9 +83,9 @@ export function Button(props: LinkButtonProps | NativeButtonProps) {
 
   if (rest.href !== undefined) {
     return (
-      <Link className={classes} {...(rest as Omit<LinkButtonProps, keyof CommonProps>)}>
+      <SectionLink className={classes} {...(rest as Omit<LinkButtonProps, keyof CommonProps>)}>
         {content}
-      </Link>
+      </SectionLink>
     );
   }
 

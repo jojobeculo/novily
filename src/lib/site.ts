@@ -12,8 +12,8 @@ export const siteConfig = {
   description:
     "Novily conçoit des sites web haut de gamme : sites vitrines, boutiques e-commerce et expériences digitales conceptuelles. Design éditorial, SEO et performance maximale.",
   email: "bonjour@novily.fr",
-  city: "Paris",
-  country: "FR",
+  /** The studio works fully remote: never tie it to a city. */
+  location: "Studio 100 % à distance — partout en France",
   socials: [
     { label: "Instagram", href: "https://www.instagram.com/novily.studio" },
     { label: "LinkedIn", href: "https://www.linkedin.com/company/novily" },

@@ -29,7 +29,7 @@ function Step({ index, title, description }: { index: number; title: string; des
             {String(index + 1).padStart(2, "0")}
           </span>
           <h3 className="font-serif text-title font-light md:col-span-4 md:pt-3">{title}</h3>
-          <p className="max-w-md text-base leading-relaxed text-muted md:col-span-5 md:pt-4">
+          <p className="max-w-md text-body text-muted md:col-span-5 md:pt-4">
             {description}
           </p>
         </div>
@@ -43,7 +43,7 @@ export function Process() {
   const { scrollYProgress } = useScroll({ target: listRef, offset: ["start 60%", "end 50%"] });
 
   return (
-    <section id="methode" aria-labelledby="process-title" className="section-space scroll-mt-10">
+    <section id="methode" aria-labelledby="process-title" className="section-space">
       <div className="container-page">
         <SectionHeader
           id="process-title"

@@ -4,13 +4,13 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Mentions légales",
   description: `Mentions légales et politique de confidentialité du site ${siteConfig.name}.`,
-  alternates: { canonical: `${siteConfig.url}/mentions-legales` },
+  alternates: { canonical: `${siteConfig.url}/mentions-legales/` },
 };
 
 const sections = [
   {
     title: "Éditeur du site",
-    body: `${siteConfig.legalName} — [forme juridique, capital social]. Siège social : [adresse], ${siteConfig.city}, France. SIRET : [numéro]. Directeur de la publication : [nom]. Contact : ${siteConfig.email}.`,
+    body: `${siteConfig.legalName} — [forme juridique, capital social]. Siège social : [adresse]. SIRET : [numéro]. Directeur de la publication : [nom]. Contact : ${siteConfig.email}.`,
   },
   {
     title: "Hébergement",

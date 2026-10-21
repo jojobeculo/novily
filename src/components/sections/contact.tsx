@@ -9,7 +9,7 @@ export function Contact() {
     <section
       id="contact"
       aria-labelledby="contact-title"
-      className="section-space scroll-mt-10 border-t border-line"
+      className="section-space border-t border-line"
     >
       <div className="container-page">
         <Reveal>
@@ -43,11 +43,11 @@ export function Contact() {
               </a>
             </div>
             <div>
-              <p className="text-xs tracking-[0.14em] text-faint uppercase">Studio</p>
-              <p className="mt-3 text-base text-muted">
-                {siteConfig.city}, France
+              <p className="text-xs tracking-[0.14em] text-faint uppercase">Fonctionnement</p>
+              <p className="mt-3 text-body text-muted">
+                Studio 100 % à distance, aux côtés d&apos;entreprises partout en France.
                 <br />
-                Du lundi au vendredi, 9 h – 19 h
+                Du lundi au vendredi, 9 h – 19 h.
               </p>
             </div>
           </Reveal>

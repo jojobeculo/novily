@@ -3,6 +3,8 @@
  * Projects and testimonials are fictitious showcase examples.
  */
 
+import type { ProjectType } from "./contact";
+
 /** A headline made of plain segments and accent segments (italic, periwinkle). */
 export type RichText = ReadonlyArray<string | { accent: string }>;
 
@@ -11,6 +13,8 @@ export type Service = {
   title: string;
   description: string;
   deliverables: readonly string[];
+  /** Preselected in the contact form when the visitor clicks the card. */
+  projectType?: ProjectType;
   upcoming?: boolean;
 };
 
@@ -19,8 +23,9 @@ export const services: readonly Service[] = [
     id: "vitrine",
     title: "Site vitrine",
     description:
-      "Créer une présence en ligne élégante pour représenter votre entreprise et convertir davantage de visiteurs en clients.",
+      "Créer une présence en ligne pour représenter votre entreprise et convertir davantage de visiteurs en clients.",
     deliverables: ["Direction artistique", "UX / UI", "SEO", "CMS"],
+    projectType: "Site vitrine",
   },
   {
     id: "e-commerce",
@@ -28,6 +33,7 @@ export const services: readonly Service[] = [
     description:
       "Des boutiques en ligne performantes pensées pour maximiser les ventes et offrir une expérience d'achat exceptionnelle.",
     deliverables: ["Shopify", "Headless", "Paiement", "Conversion"],
+    projectType: "E-commerce",
   },
   {
     id: "conceptuel",
@@ -35,6 +41,7 @@ export const services: readonly Service[] = [
     description:
       "Des expériences digitales créatives pour des marques, artistes ou événements.",
     deliverables: ["Storytelling", "Motion design", "WebGL", "Événementiel"],
+    projectType: "Site conceptuel",
   },
   {
     id: "applications",
@@ -248,8 +255,8 @@ export const faqs = [
       "Oui. Nos formules de maintenance couvrent les mises à jour, la sécurité, les sauvegardes, le suivi des performances et les évolutions de votre site.",
   },
   {
-    question: "Travaillez-vous avec des clients partout en France ?",
+    question: "Travaillez-vous avec des entreprises partout en France ?",
     answer:
-      "Nous sommes basés à Paris et accompagnons des clients dans toute la France et en Europe. Les échanges se font en visioconférence ou en personne selon vos préférences.",
+      "Oui. Novily est un studio entièrement à distance : nous accompagnons des entreprises dans toute la France. Les échanges se font en visioconférence, par téléphone et par e-mail, avec un interlocuteur unique du premier appel à la mise en ligne.",
   },
 ] as const;

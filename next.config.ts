@@ -6,6 +6,8 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
 const nextConfig: NextConfig = {
   output: "export",
   basePath,
+  // "/novily/" and "/novily/mentions-legales/": the URLs GitHub Pages serves without a redirect.
+  trailingSlash: true,
   images: {
     loader: "custom",
     loaderFile: "./src/lib/image-loader.ts",

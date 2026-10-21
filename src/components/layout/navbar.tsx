@@ -1,14 +1,21 @@
 "use client";
 
-import { AnimatePresence, m, useMotionValueEvent, useScroll } from "framer-motion";
-import Link from "next/link";
+import {
+  AnimatePresence,
+  m,
+  useMotionValueEvent,
+  useScroll,
+  useSpring,
+} from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { Magnetic } from "@/components/ui/magnetic";
+import { SectionLink } from "@/components/ui/section-link";
 import { easeInOutQuart, easeOutExpo } from "@/lib/motion";
 import { navigation, siteConfig } from "@/lib/site";
+import { useSmoothScroll } from "./smooth-scroll";
 
 /** Tracks which home page section sits in the middle of the viewport. */
 function useActiveSection(enabled: boolean) {
@@ -35,29 +42,32 @@ function useActiveSection(enabled: boolean) {
 }
 
 export function Navbar() {
-  const { scrollY } = useScroll();
+  const { scrollY, scrollYProgress } = useScroll();
+  const progress = useSpring(scrollYProgress, { stiffness: 120, damping: 30, mass: 0.4 });
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
   const active = useActiveSection(usePathname() === "/");
+  const { setLocked, isAutoScrolling } = useSmoothScroll();
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const previous = scrollY.getPrevious() ?? 0;
     setScrolled(y > 24);
-    setHidden(y > 480 && y > previous + 2);
-    if (y < previous - 2) setHidden(false);
+    // Hide while reading down, show again on the way up. Stay in view during anchor glides.
+    if (isAutoScrolling() || y < previous - 2) setHidden(false);
+    else if (y > 480 && y > previous + 2) setHidden(true);
   });
 
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    document.documentElement.style.overflow = "hidden";
+    setLocked(true);
     window.addEventListener("keydown", onKey);
     return () => {
-      document.documentElement.style.overflow = "";
+      setLocked(false);
       window.removeEventListener("keydown", onKey);
     };
-  }, [open]);
+  }, [open, setLocked]);
 
   const close = () => setOpen(false);
 
@@ -66,37 +76,44 @@ export function Navbar() {
       <m.header
         initial={{ y: -24, opacity: 0 }}
         animate={{ y: hidden && !open ? "-100%" : 0, opacity: 1 }}
-        transition={{ duration: 0.9, ease: easeOutExpo }}
-        className={`fixed inset-x-0 top-0 z-50 border-b transition-[background-color,border-color,backdrop-filter] duration-700 ease-out-expo ${
-          scrolled && !open
-            ? "border-line bg-ink/55 backdrop-blur-xl"
-            : "border-transparent bg-transparent"
+        transition={{ duration: 0.8, ease: easeOutExpo }}
+        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-700 ease-out-expo ${
+          scrolled && !open ? "bg-ink/60 backdrop-blur-xl" : "bg-transparent"
         }`}
       >
         <nav
           aria-label="Navigation principale"
-          className="container-page flex h-20 items-center justify-between gap-6"
+          className={`container-page flex items-center justify-between gap-6 transition-[height] duration-700 ease-out-expo ${
+            scrolled ? "h-16" : "h-20"
+          }`}
         >
           <Logo onClick={close} />
 
           <ul className="hidden items-center gap-9 lg:flex">
-            {navigation.map((item) => (
-              <li key={item.id}>
-                <Link
-                  href={item.href}
-                  aria-current={active === item.id ? "location" : undefined}
-                  className={`group relative py-2 text-sm font-normal transition-colors duration-500 ${
-                    active === item.id ? "text-accent" : "text-cream/75 hover:text-cream"
-                  }`}
-                >
-                  {item.label}
-                  <span
-                    aria-hidden
-                    className="absolute inset-x-0 bottom-0 h-px origin-right scale-x-0 bg-current transition-transform duration-500 ease-out-expo group-hover:origin-left group-hover:scale-x-100"
-                  />
-                </Link>
-              </li>
-            ))}
+            {navigation.map((item) => {
+              const current = active === item.id;
+              return (
+                <li key={item.id}>
+                  <SectionLink
+                    href={item.href}
+                    aria-current={current ? "location" : undefined}
+                    className={`group relative block py-2 text-sm font-normal transition-[color,opacity] duration-500 active:opacity-60 ${
+                      current ? "text-cream" : "text-cream/65 hover:text-cream"
+                    }`}
+                  >
+                    {item.label}
+                    <span
+                      aria-hidden
+                      className={`absolute inset-x-0 bottom-0 h-px transition-transform duration-700 ease-out-expo ${
+                        current
+                          ? "origin-left scale-x-100 bg-accent"
+                          : "origin-right scale-x-0 bg-current group-hover:origin-left group-hover:scale-x-100"
+                      }`}
+                    />
+                  </SectionLink>
+                </li>
+              );
+            })}
           </ul>
 
           <div className="flex items-center gap-4">
@@ -114,7 +131,7 @@ export function Navbar() {
               aria-expanded={open}
               aria-controls="mobile-menu"
               aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
-              className="relative flex size-11 items-center justify-center lg:hidden"
+              className="relative flex size-11 items-center justify-center rounded-full transition-[background-color,scale] duration-300 active:scale-90 active:bg-cream/10 lg:hidden"
             >
               <span
                 className={`absolute h-px w-6 bg-cream transition-transform duration-500 ease-out-expo ${
@@ -129,6 +146,16 @@ export function Navbar() {
             </button>
           </div>
         </nav>
+
+        {/* Hairline that fills with the reading progress once the page scrolls. */}
+        <div
+          aria-hidden
+          className={`absolute inset-x-0 bottom-0 h-px bg-line transition-opacity duration-700 ${
+            scrolled && !open ? "opacity-100" : "opacity-0"
+          }`}
+        >
+          <m.div style={{ scaleX: progress }} className="h-full origin-left bg-cream/50" />
+        </div>
       </m.header>
 
       <AnimatePresence>
@@ -151,14 +178,16 @@ export function Navbar() {
                     exit={{ y: "100%", transition: { duration: 0.3 } }}
                     transition={{ duration: 0.9, ease: easeOutExpo, delay: 0.25 + i * 0.06 }}
                   >
-                    <Link
+                    <SectionLink
                       href={item.href}
                       onClick={close}
-                      className="flex items-baseline gap-4 py-1 font-serif text-[clamp(2.5rem,11vw,4rem)] leading-tight font-light"
+                      className={`flex items-baseline gap-4 py-1 font-serif text-[clamp(2.5rem,11vw,4rem)] leading-tight font-light transition-opacity active:opacity-60 ${
+                        active === item.id ? "text-cream" : "text-cream/70"
+                      }`}
                     >
                       <span className="font-sans text-xs text-faint">0{i + 1}</span>
                       {item.label}
-                    </Link>
+                    </SectionLink>
                   </m.div>
                 </li>
               ))}
@@ -172,9 +201,10 @@ export function Navbar() {
               <Button href="/#contact" onClick={close} arrow className="self-start">
                 Parlons de votre projet
               </Button>
-              <a href={`mailto:${siteConfig.email}`} className="text-sm text-muted">
-                {siteConfig.email}
-              </a>
+              <div className="flex flex-col gap-1.5 text-sm text-muted">
+                <a href={`mailto:${siteConfig.email}`}>{siteConfig.email}</a>
+                <span className="text-faint">{siteConfig.location}</span>
+              </div>
             </m.div>
           </m.div>
         ) : null}

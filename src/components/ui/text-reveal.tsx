@@ -19,8 +19,12 @@ type TextRevealProps = {
 };
 
 const word: Variants = {
-  hidden: { y: "110%" },
-  visible: { y: "0%", transition: { duration: 1.2, ease: easeOutExpo } },
+  hidden: { y: "110%", opacity: 0 },
+  visible: {
+    y: "0%",
+    opacity: 1,
+    transition: { duration: 1.2, ease: easeOutExpo, opacity: { duration: 0.8, ease: "linear" } },
+  },
 };
 
 const accentClass = "inline-block pr-[0.06em] font-serif italic text-accent";

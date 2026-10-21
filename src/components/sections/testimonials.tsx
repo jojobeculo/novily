@@ -20,7 +20,7 @@ function ArrowButton({ direction, onClick }: { direction: "prev" | "next"; onCli
       type="button"
       onClick={onClick}
       aria-label={direction === "prev" ? "Témoignage précédent" : "Témoignage suivant"}
-      className="group flex size-12 items-center justify-center rounded-full border border-line-strong transition-colors duration-500 hover:border-cream hover:bg-cream hover:text-ink"
+      className="group flex size-12 items-center justify-center rounded-full border border-line-strong transition-[color,background-color,border-color,scale] duration-500 hover:border-cream hover:bg-cream hover:text-ink active:scale-90 active:duration-150"
     >
       <svg
         aria-hidden

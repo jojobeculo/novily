@@ -16,11 +16,6 @@ const graph = {
       image: `${siteConfig.url}/opengraph-image.jpg`,
       description: siteConfig.description,
       email: siteConfig.email,
-      address: {
-        "@type": "PostalAddress",
-        addressLocality: siteConfig.city,
-        addressCountry: siteConfig.country,
-      },
       areaServed: { "@type": "Country", name: "France" },
       sameAs: siteConfig.socials.map((s) => s.href),
       hasOfferCatalog: {

@@ -1,10 +1,16 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
-import { parseContact, projectTypes, type ContactErrors } from "@/lib/contact";
+import {
+  parseContact,
+  PROJECT_TYPE_EVENT,
+  projectTypes,
+  type ContactErrors,
+  type ProjectType,
+} from "@/lib/contact";
 import { easeOutExpo } from "@/lib/motion";
 import { siteConfig } from "@/lib/site";
 
@@ -74,7 +80,14 @@ function Field({ name, label, error, type = "text", autoComplete, multiline, opt
 export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<ContactErrors>({});
-  const [projectType, setProjectType] = useState<string>("");
+  const [projectType, setProjectType] = useState<ProjectType | "">("");
+
+  // A service card preselects its project type before the page glides here.
+  useEffect(() => {
+    const onPick = (e: Event) => setProjectType((e as CustomEvent<ProjectType>).detail);
+    window.addEventListener(PROJECT_TYPE_EVENT, onPick);
+    return () => window.removeEventListener(PROJECT_TYPE_EVENT, onPick);
+  }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -199,7 +212,7 @@ export function ContactForm() {
                     type="button"
                     aria-pressed={active}
                     onClick={() => setProjectType(active ? "" : type)}
-                    className={`rounded-full border px-4 py-2 text-sm transition-colors duration-500 ${
+                    className={`rounded-full border px-4 py-2 text-sm transition-[color,background-color,border-color,scale] duration-500 active:scale-95 active:duration-150 ${
                       active
                         ? "border-cream bg-cream text-ink"
                         : "border-line text-muted hover:border-line-strong hover:text-cream"

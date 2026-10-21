@@ -9,6 +9,7 @@ Réalisations, Méthode, Témoignages, FAQ, Contact) et une page de mentions lé
 - TypeScript
 - Tailwind CSS 4 (jetons de design dans `src/app/globals.css`)
 - Framer Motion (chargé via `LazyMotion`, respecte `prefers-reduced-motion`)
+- Lenis pour le défilement fluide et les ancres (désactivé si « réduire les animations »)
 
 ## Démarrer
 
@@ -54,10 +55,10 @@ src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
     mentions-legales/
   components/
-    layout/            Navbar, Footer, MotionProvider
+    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis)
     sections/          une section de la page d'accueil par fichier
-    ui/                briques réutilisables : Button, TextReveal, Reveal, ImageReveal,
-                       Magnetic, Accordion, SectionHeader, Logo
+    ui/                briques réutilisables : Button, SectionLink, TextReveal, Reveal,
+                       ImageReveal, Magnetic, Accordion, SectionHeader, Logo
     seo/               données structurées JSON-LD
   lib/
     content.ts         tous les textes : services, projets, témoignages, FAQ…
@@ -77,6 +78,13 @@ se met à jour seul selon la catégorie (`vitrine`, `e-commerce`, `conceptuel`).
 
 Les projets et témoignages actuels sont des exemples fictifs. Les photos des maquettes viennent
 d'Unsplash. Complétez aussi les champs entre crochets de `src/app/mentions-legales/page.tsx`.
+
+## Liens internes
+
+Tout lien vers une section de l'accueil s'écrit `/#<id>` et passe par `SectionLink` (déjà utilisé
+par `Button`). Sur l'accueil, il fait glisser la page jusqu'à la section, même si l'URL contient
+déjà ce `#`. Depuis une autre page, il ramène sur l'accueil. Les id de section sont listés dans
+`navigation` (`src/lib/site.ts`).
 
 ## Charte
 

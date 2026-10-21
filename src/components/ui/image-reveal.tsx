@@ -2,7 +2,7 @@
 
 import { m, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { easeInOutQuart, inViewOnce } from "@/lib/motion";
 
 type ImageRevealProps = {
@@ -21,6 +21,7 @@ export function ImageReveal({ src, alt, sizes, className, priority = false }: Im
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], ["-6%", "6%"]);
+  const [loaded, setLoaded] = useState(false);
 
   return (
     <m.div
@@ -45,7 +46,11 @@ export function ImageReveal({ src, alt, sizes, className, priority = false }: Im
             fill
             sizes={sizes}
             priority={priority}
-            className="object-cover transition-transform duration-[1600ms] ease-out-expo group-hover:scale-[1.045]"
+            onLoad={() => setLoaded(true)}
+            // Fade in once decoded, so a slow image never pops in mid-reveal.
+            className={`object-cover transition-[scale,opacity] duration-[1600ms] ease-out-expo group-hover:scale-[1.045] ${
+              loaded ? "opacity-100" : "opacity-0"
+            }`}
           />
         </m.div>
       </m.div>

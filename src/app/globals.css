@@ -9,7 +9,7 @@
   --color-surface: #0d0d0c;
   --color-line: rgb(244 239 212 / 0.14);
   --color-line-strong: rgb(244 239 212 / 0.32);
-  --color-muted: rgb(244 239 212 / 0.62);
+  --color-muted: rgb(244 239 212 / 0.7);
   --color-faint: rgb(244 239 212 / 0.52);
 
   /* Typography */
@@ -34,6 +34,10 @@
 
   --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem);
   --text-lead--line-height: 1.6;
+
+  /* Running text: a little larger than the UI size, with generous leading. */
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
 
   /* Motion */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -103,6 +107,12 @@
     border-radius: 2px;
   }
 
+  /* Lenis drives the scroll: native smooth scrolling would fight it. */
+  html.lenis,
+  html.lenis body {
+    scroll-behavior: auto;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -118,5 +128,5 @@
 }
 
 @utility section-space {
-  padding-block: clamp(6rem, 4rem + 9vw, 12rem);
+  padding-block: clamp(7.5rem, 5rem + 10vw, 15rem);
 }

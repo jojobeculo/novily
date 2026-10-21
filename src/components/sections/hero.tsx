@@ -5,6 +5,7 @@ import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import { TextReveal } from "@/components/ui/text-reveal";
+import { siteConfig } from "@/lib/site";
 import { HeroVisual } from "./hero-visual";
 
 /** CSS entrance, so the first screen paints without waiting for JavaScript. */
@@ -32,13 +33,13 @@ export function Hero() {
       >
         <div className={enter} style={delay(0.1)}>
           <p className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-eyebrow uppercase text-faint md:mb-14">
-            <span>Studio digital indépendant — Paris</span>
+            <span>Création de sites web sur mesure</span>
             <span className="flex items-center gap-2.5 text-muted">
               <span className="relative flex size-1.5">
                 <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
                 <span className="relative size-1.5 rounded-full bg-accent" />
               </span>
-              Disponibles pour vos projets
+              {siteConfig.location}
             </span>
           </p>
         </div>
@@ -59,8 +60,8 @@ export function Hero() {
         <div className="mt-14 grid gap-10 border-t border-line pt-10 md:mt-20 md:grid-cols-12 md:items-end md:gap-6">
           <div className={`md:col-span-5 ${enter}`} style={delay(0.6)}>
             <p className="max-w-md text-lead text-muted">
-              Novily imagine et développe des sites web d&apos;exception : élégants, rapides et
-              pensés pour transformer vos visiteurs en clients.
+              Novily imagine et développe des sites web élégants, rapides et pensés pour
+              transformer vos visiteurs en clients.
             </p>
           </div>
 

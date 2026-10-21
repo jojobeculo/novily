@@ -1,10 +1,14 @@
 export const projectTypes = ["Site vitrine", "E-commerce", "Site conceptuel", "Autre"] as const;
+export type ProjectType = (typeof projectTypes)[number];
+
+/** Window event that preselects a project type in the contact form. */
+export const PROJECT_TYPE_EVENT = "novily:project-type";
 
 export type ContactRequest = {
   name: string;
   email: string;
   company: string;
-  projectType: (typeof projectTypes)[number] | "";
+  projectType: ProjectType | "";
   message: string;
 };
 

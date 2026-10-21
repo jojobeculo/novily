@@ -3,20 +3,23 @@
 import { m } from "framer-motion";
 import Link from "next/link";
 import { Logo } from "@/components/ui/logo";
+import { SectionLink } from "@/components/ui/section-link";
 import { easeOutExpo, inViewOnce } from "@/lib/motion";
 import { navigation, siteConfig } from "@/lib/site";
+import { useSmoothScroll } from "./smooth-scroll";
 
 const linkClass =
-  "text-sm text-muted transition-colors duration-500 hover:text-cream";
+  "inline-block text-sm text-muted transition-[color,translate,opacity] duration-500 ease-out-expo hover:translate-x-1 hover:text-cream active:opacity-60";
 
 export function Footer({ year }: { year: number }) {
+  const { scrollTo } = useSmoothScroll();
   return (
     <footer className="overflow-hidden border-t border-line pt-20 md:pt-28">
       <div className="container-page">
         <div className="grid grid-cols-2 gap-x-6 gap-y-14 md:grid-cols-12">
           <div className="col-span-2 md:col-span-5">
             <Logo />
-            <p className="mt-6 max-w-xs text-base leading-relaxed text-muted">
+            <p className="mt-6 max-w-xs text-body text-muted">
               Studio digital indépendant. Sites vitrines, e-commerce et expériences web sur mesure.
             </p>
           </div>
@@ -26,9 +29,9 @@ export function Footer({ year }: { year: number }) {
             <ul className="mt-6 flex flex-col gap-3">
               {navigation.map((item) => (
                 <li key={item.id}>
-                  <Link href={item.href} className={linkClass}>
+                  <SectionLink href={item.href} className={linkClass}>
                     {item.label}
-                  </Link>
+                  </SectionLink>
                 </li>
               ))}
             </ul>
@@ -55,7 +58,7 @@ export function Footer({ year }: { year: number }) {
                   {siteConfig.email}
                 </a>
               </li>
-              <li className="text-sm text-muted">{siteConfig.city}, France</li>
+              <li className="text-sm text-muted">{siteConfig.location}</li>
             </ul>
           </div>
         </div>
@@ -65,13 +68,16 @@ export function Footer({ year }: { year: number }) {
             © {year} {siteConfig.legalName}. Tous droits réservés.
           </p>
           <div className="flex items-center gap-8">
-            <Link href="/mentions-legales" className="transition-colors hover:text-cream">
+            <Link href="/mentions-legales" className="transition-[color,opacity] hover:text-cream active:opacity-60">
               Mentions légales
             </Link>
             <button
               type="button"
-              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-              className="group flex items-center gap-2 transition-colors hover:text-cream"
+              onClick={() => {
+                scrollTo(0);
+                window.history.replaceState(window.history.state, "", window.location.pathname);
+              }}
+              className="group flex items-center gap-2 transition-[color,opacity] hover:text-cream active:opacity-60"
             >
               Haut de page
               <span aria-hidden className="transition-transform duration-500 ease-out-expo group-hover:-translate-y-0.5">

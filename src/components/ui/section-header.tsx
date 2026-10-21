@@ -1,5 +1,9 @@
+"use client";
+
+import { m } from "framer-motion";
 import type { ReactNode } from "react";
 import type { RichText } from "@/lib/content";
+import { easeOutExpo, inViewOnce } from "@/lib/motion";
 import { Reveal } from "./reveal";
 import { TextReveal } from "./text-reveal";
 
@@ -17,7 +21,14 @@ export function Eyebrow({ index, label }: { index: string; label: string }) {
   return (
     <p className="flex items-center gap-3 text-eyebrow uppercase text-faint">
       <span className="text-cream">{index}</span>
-      <span aria-hidden className="h-px w-8 bg-line-strong" />
+      <m.span
+        aria-hidden
+        className="h-px w-8 origin-left bg-line-strong"
+        initial={{ scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={inViewOnce}
+        transition={{ duration: 1.2, ease: easeOutExpo, delay: 0.2 }}
+      />
       <span>{label}</span>
     </p>
   );
@@ -38,7 +49,7 @@ export function SectionHeader({ index, label, title, intro, id, className }: Sec
         />
       </div>
       {intro ? (
-        <Reveal delay={0.15} className="self-end text-lead text-muted md:col-span-4">
+        <Reveal delay={0.25} className="max-w-sm self-end text-lead text-muted md:col-span-4">
           {intro}
         </Reveal>
       ) : null}

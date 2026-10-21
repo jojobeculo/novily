@@ -1,9 +1,9 @@
-import Link from "next/link";
+import { SectionLink } from "./section-link";
 
 /** Serif wordmark with a periwinkle full stop — the brand signature. */
 export function Logo({ className, onClick }: { className?: string; onClick?: () => void }) {
   return (
-    <Link
+    <SectionLink
       href="/#accueil"
       onClick={onClick}
       aria-label="Novily — retour à l'accueil"
@@ -13,6 +13,6 @@ export function Logo({ className, onClick }: { className?: string; onClick?: () 
       <span aria-hidden className="text-accent">
         .
       </span>
-    </Link>
+    </SectionLink>
   );
 }

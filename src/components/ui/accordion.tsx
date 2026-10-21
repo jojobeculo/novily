@@ -26,7 +26,7 @@ export function Accordion({ items }: { items: readonly AccordionItem[] }) {
                 aria-expanded={expanded}
                 aria-controls={panelId}
                 onClick={() => setOpen(expanded ? null : i)}
-                className="group flex w-full items-center justify-between gap-8 py-7 text-left md:py-8"
+                className="group flex w-full items-center justify-between gap-8 py-7 text-left transition-opacity active:opacity-70 md:py-8"
               >
                 <span
                   className={`font-serif text-[clamp(1.25rem,1.1rem+0.6vw,1.75rem)] leading-snug font-light transition-colors duration-500 ${
@@ -59,7 +59,7 @@ export function Accordion({ items }: { items: readonly AccordionItem[] }) {
                   transition={{ duration: 0.7, ease: easeOutExpo }}
                   className="overflow-hidden"
                 >
-                  <p className="max-w-2xl pr-14 pb-8 text-base leading-relaxed text-muted">
+                  <p className="max-w-2xl pr-14 pb-9 text-body text-muted">
                     {item.answer}
                   </p>
                 </m.div>

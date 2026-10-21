@@ -5,7 +5,7 @@ import { commitments, strengths } from "@/lib/content";
 
 export function WhyUs() {
   return (
-    <section id="a-propos" aria-labelledby="why-title" className="section-space scroll-mt-10">
+    <section id="a-propos" aria-labelledby="why-title" className="section-space">
       <div className="container-page grid gap-16 lg:grid-cols-12 lg:gap-6">
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-32">
@@ -20,13 +20,14 @@ export function WhyUs() {
             />
             <Reveal delay={0.15}>
               <p className="mt-10 max-w-md text-lead text-muted">
-                Novily est un studio digital indépendant fondé sur une conviction simple : un site
-                web doit être aussi beau qu&apos;efficace. Nous travaillons avec peu de clients à la
-                fois, pour donner à chacun toute notre attention.
+                Novily est un studio indépendant, entièrement à distance, qui accompagne des
+                entreprises partout en France. Notre conviction : un site web doit être aussi beau
+                qu&apos;efficace. Nous travaillons avec peu de clients à la fois, pour donner à
+                chacun toute notre attention.
               </p>
             </Reveal>
 
-            <dl className="mt-14 grid grid-cols-3 gap-6 border-t border-line pt-8">
+            <dl className="mt-16 grid grid-cols-3 gap-6 border-t border-line pt-10">
               {commitments.map((c, i) => (
                 <Reveal key={c.label} delay={0.1 * i}>
                   <dt className="sr-only">{c.label}</dt>
@@ -34,7 +35,7 @@ export function WhyUs() {
                     <span className="block font-serif text-[clamp(1.75rem,1.2rem+1.6vw,2.75rem)] leading-none font-light">
                       {c.value}
                     </span>
-                    <span className="mt-3 block text-xs leading-snug text-faint">{c.label}</span>
+                    <span className="mt-3 block text-xs leading-relaxed text-faint">{c.label}</span>
                   </dd>
                 </Reveal>
               ))}
@@ -46,8 +47,8 @@ export function WhyUs() {
           {strengths.map((item, i) => (
             <li key={item.title}>
               <RevealLine />
-              <Reveal y={20}>
-                <div className="group grid grid-cols-[3rem_1fr] gap-x-4 py-9 md:grid-cols-[4rem_1fr] md:py-11">
+              <Reveal y={20} delay={0.05}>
+                <div className="group grid grid-cols-[3rem_1fr] gap-x-4 py-10 md:grid-cols-[4rem_1fr] md:py-12">
                   <span className="pt-2 text-sm text-faint tabular-nums transition-colors duration-500 group-hover:text-accent">
                     {String(i + 1).padStart(2, "0")}
                   </span>
@@ -55,7 +56,7 @@ export function WhyUs() {
                     <h3 className="font-serif text-[clamp(1.5rem,1.2rem+1vw,2.125rem)] leading-tight font-light">
                       {item.title}
                     </h3>
-                    <p className="mt-3 max-w-md text-base leading-relaxed text-muted">
+                    <p className="mt-4 max-w-md text-body text-muted">
                       {item.description}
                     </p>
                   </div>
