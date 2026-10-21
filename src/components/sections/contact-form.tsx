@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
 import {
@@ -26,6 +26,11 @@ type FieldProps = {
   optional?: boolean;
 };
 
+// Same limits as parseContact, so the browser stops typing where validation would refuse.
+const MIN_FILL_MS = 3000;
+
+const MAX_LENGTH: Record<FieldProps["name"], number> = { name: 120, email: 200, company: 120, message: 5000 };
+
 function Field({ name, label, error, type = "text", autoComplete, multiline, optional }: FieldProps) {
   const id = `contact-${name}`;
   const errorId = `${id}-error`;
@@ -39,6 +44,8 @@ function Field({ name, label, error, type = "text", autoComplete, multiline, opt
           id={id}
           name={name}
           rows={4}
+          required={!optional}
+          maxLength={MAX_LENGTH[name]}
           placeholder={label}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
@@ -50,6 +57,8 @@ function Field({ name, label, error, type = "text", autoComplete, multiline, opt
           name={name}
           type={type}
           autoComplete={autoComplete}
+          required={!optional}
+          maxLength={MAX_LENGTH[name]}
           placeholder={label}
           aria-invalid={error ? true : undefined}
           aria-describedby={error ? errorId : undefined}
@@ -81,6 +90,11 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<ContactErrors>({});
   const [projectType, setProjectType] = useState<ProjectType | "">("");
+  // When the form became usable: a submission within seconds of it comes from a bot.
+  const readyAt = useRef(0);
+  useEffect(() => {
+    readyAt.current = Date.now();
+  }, []);
 
   // A service card preselects its project type before the page glides here.
   useEffect(() => {
@@ -100,8 +114,9 @@ export function ContactForm() {
     }
     setErrors({});
 
-    // Honeypot: real visitors never see nor fill this field.
-    if (values.website) {
+    // Anti-spam: real visitors never see nor fill the honeypot field, and need more
+    // than a few seconds to write a message. Bots get a silent fake success.
+    if (values.website || Date.now() - readyAt.current < MIN_FILL_MS) {
       setStatus("sent");
       return;
     }
