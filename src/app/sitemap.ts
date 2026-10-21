@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteConfig.url}/mentions-legales/`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${siteConfig.url}/politique-de-confidentialite/`, changeFrequency: "yearly", priority: 0.2 },
     { url: `${siteConfig.url}/cgu/`, changeFrequency: "yearly", priority: 0.2 },
+    { url: `${siteConfig.url}/accessibilite/`, changeFrequency: "yearly", priority: 0.2 },
   ];
 }
 
