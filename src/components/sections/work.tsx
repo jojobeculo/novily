@@ -16,7 +16,7 @@ import { easeOutExpo } from "@/lib/motion";
 
 type Filter = ProjectCategory | "all";
 
-function ProjectCard({ project }: { project: Project }) {
+export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="group">
       <ImageReveal

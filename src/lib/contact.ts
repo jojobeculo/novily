@@ -1,8 +1,41 @@
-export const projectTypes = ["Site vitrine", "E-commerce", "Site conceptuel", "Autre"] as const;
+export const projectTypes = [
+  "Site web",
+  "Accessibilité et conformité",
+  "Transition IA",
+  "Marketing et motion design",
+  "Logiciel sur mesure",
+  "Autre",
+] as const;
 export type ProjectType = (typeof projectTypes)[number];
 
 /** Window event that preselects a project type in the contact form. */
 export const PROJECT_TYPE_EVENT = "noveo:project-type";
+
+const PROJECT_TYPE_KEY = "noveo-project-type";
+
+/**
+ * Preselects a project type in the contact form: right away when the form is
+ * on the page, or when it appears after navigating to the home page.
+ */
+export function requestProjectType(type: ProjectType) {
+  try {
+    sessionStorage.setItem(PROJECT_TYPE_KEY, type);
+  } catch {
+    // Storage blocked: only the same-page event works.
+  }
+  window.dispatchEvent(new CustomEvent(PROJECT_TYPE_EVENT, { detail: type }));
+}
+
+/** The type requested from another page, if any. Read once. */
+export function takeRequestedProjectType(): ProjectType | null {
+  try {
+    const value = sessionStorage.getItem(PROJECT_TYPE_KEY);
+    sessionStorage.removeItem(PROJECT_TYPE_KEY);
+    return projectTypes.find((t) => t === value) ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export type ContactRequest = {
   name: string;

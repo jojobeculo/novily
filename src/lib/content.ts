@@ -3,59 +3,8 @@
  * Projects and testimonials are fictitious showcase examples.
  */
 
-import type { ProjectType } from "./contact";
-
 /** A headline made of plain segments and accent segments (italic, periwinkle). */
 export type RichText = ReadonlyArray<string | { accent: string }>;
-
-export type Service = {
-  id: string;
-  title: string;
-  description: string;
-  deliverables: readonly string[];
-  /** Preselected in the contact form when the visitor clicks the card. */
-  projectType?: ProjectType;
-  /** Slug of the project in `projects` whose image illustrates the service. */
-  showcase?: string;
-  upcoming?: boolean;
-};
-
-export const services: readonly Service[] = [
-  {
-    id: "vitrine",
-    title: "Site vitrine",
-    description:
-      "Créer une présence en ligne pour représenter votre entreprise et convertir davantage de visiteurs en clients.",
-    deliverables: ["Direction artistique", "UX / UI", "SEO", "CMS"],
-    projectType: "Site vitrine",
-    showcase: "atelier-linea",
-  },
-  {
-    id: "e-commerce",
-    title: "Site E-Commerce",
-    description:
-      "Des boutiques en ligne performantes pensées pour maximiser les ventes et offrir une expérience d'achat exceptionnelle.",
-    deliverables: ["Shopify", "Headless", "Paiement", "Conversion"],
-    projectType: "E-commerce",
-    showcase: "seve",
-  },
-  {
-    id: "conceptuel",
-    title: "Sites conceptuels",
-    description:
-      "Des expériences digitales créatives pour des marques, artistes ou événements.",
-    deliverables: ["Storytelling", "Motion design", "WebGL", "Événementiel"],
-    projectType: "Site conceptuel",
-    showcase: "orbe-festival",
-  },
-  {
-    id: "applications",
-    title: "Applications Web",
-    description: "Nous développerons bientôt des applications web sur mesure.",
-    deliverables: ["Sur mesure", "SaaS", "Outils métier"],
-    upcoming: true,
-  },
-];
 
 export const strengths = [
   {

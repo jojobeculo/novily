@@ -1,4 +1,5 @@
-import { faqs, services } from "@/lib/content";
+import { faqs } from "@/lib/content";
+import { serviceHref, services } from "@/lib/services";
 import { siteConfig } from "@/lib/site";
 
 const organizationId = `${siteConfig.url}/#organization`;
@@ -31,7 +32,12 @@ const graph = {
           .filter((s) => !s.upcoming)
           .map((s) => ({
             "@type": "Offer",
-            itemOffered: { "@type": "Service", name: s.title, description: s.description },
+            itemOffered: {
+              "@type": "Service",
+              name: s.title,
+              description: s.description,
+              url: `${siteConfig.url}${serviceHref(s)}`,
+            },
           })),
       },
     },

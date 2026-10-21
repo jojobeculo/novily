@@ -7,7 +7,6 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import Image from "next/image";
 import {
   useEffect,
   useRef,
@@ -20,8 +19,8 @@ import { useMotionPreference } from "@/components/layout/motion-provider";
 import { useSmoothScroll } from "@/components/layout/smooth-scroll";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
-import { PROJECT_TYPE_EVENT } from "@/lib/contact";
-import { projects, services, type Service } from "@/lib/content";
+import { serviceHref, services, type Service } from "@/lib/services";
+import { ServiceArt } from "./service-art";
 
 const COUNT = services.length;
 const STEPS = COUNT - 1;
@@ -71,51 +70,6 @@ const DEPTH_TABLET: Depth = { rotate: 8, depth: 150, shrink: 0.06, lift: 5 };
 /* Panel content, shared by both modes.                                 */
 /* ------------------------------------------------------------------ */
 
-/** Placeholder art for a service with no project yet: a hairline web-app wireframe. */
-function UpcomingArt() {
-  return (
-    <div className="flex h-full min-h-56 items-center justify-center rounded-[10px] border border-line bg-ink">
-      <svg aria-hidden viewBox="0 0 400 260" className="w-[72%] max-w-md" fill="none">
-        <g stroke="var(--color-cream)" strokeOpacity="0.22" vectorEffect="non-scaling-stroke">
-          <rect x="0.5" y="0.5" width="399" height="259" rx="10" />
-          <path d="M0.5 30.5h399M90.5 30.5v229" />
-          <rect x="20" y="50" width="50" height="6" rx="3" />
-          <rect x="20" y="68" width="40" height="6" rx="3" />
-          <rect x="20" y="86" width="46" height="6" rx="3" />
-          <rect x="110" y="50" width="130" height="80" rx="6" />
-          <rect x="252" y="50" width="130" height="80" rx="6" />
-          <rect x="110" y="144" width="272" height="96" rx="6" />
-          <path d="M126 220l40-34 32 20 44-46 46 28 52-30 26 18" strokeOpacity="0.4" />
-        </g>
-        <circle cx="13" cy="15" r="3" fill="var(--color-accent)" />
-      </svg>
-    </div>
-  );
-}
-
-function ServiceArt({ service, layout }: { service: Service; layout: "stage" | "list" }) {
-  const project = projects.find((p) => p.slug === service.showcase);
-  if (!project) return <UpcomingArt />;
-  return (
-    <figure
-      className={`relative overflow-hidden rounded-[10px] bg-ink ${
-        layout === "stage" ? "h-full min-h-0" : "aspect-[4/3]"
-      }`}
-    >
-      <Image
-        src={project.image}
-        alt={project.imageAlt}
-        fill
-        sizes="(min-width: 1024px) 55vw, 100vw"
-        className="object-cover"
-      />
-      <figcaption className="absolute bottom-3 left-3 rounded-full bg-ink/75 px-3.5 py-1.5 text-xs text-cream/85">
-        Réalisation — {project.name}
-      </figcaption>
-    </figure>
-  );
-}
-
 function ServiceContent({
   service,
   index,
@@ -156,15 +110,27 @@ function ServiceContent({
 
         <h3
           id={`service-${service.id}`}
-          className={`font-serif font-light ${
+          className={`font-serif font-light text-balance ${
             stage
-              ? "mt-[3vh] text-[min(clamp(2.25rem,1.4rem+2.4vw,4.25rem),7.5vh)] leading-[1.02] tracking-[-0.02em] lg:mt-auto"
+              ? `mt-[3vh] leading-[1.04] tracking-[-0.02em] lg:mt-auto ${
+                  // Long titles get a smaller size so the panel never overflows.
+                  service.title.length > 26
+                    ? "text-[min(clamp(1.875rem,1.2rem+1.6vw,3rem),5.6vh)]"
+                    : "text-[min(clamp(2.25rem,1.4rem+2.4vw,4.25rem),7.5vh)]"
+                }`
               : "mt-6 text-title"
           }`}
         >
           {service.title}
         </h3>
-        <p className={`max-w-md text-body text-muted ${stage ? "mt-[2.2vh]" : "mt-5"}`}>
+        <p
+          className={`max-w-md font-serif text-[clamp(1.125rem,1rem+0.4vw,1.375rem)] leading-snug font-light text-accent italic ${
+            stage ? "mt-[1.8vh]" : "mt-4"
+          }`}
+        >
+          {service.hook}
+        </p>
+        <p className={`max-w-md text-body text-muted ${stage ? "mt-[1.8vh]" : "mt-4"}`}>
           {service.description}
         </p>
         <ul
@@ -179,21 +145,16 @@ function ServiceContent({
             </li>
           ))}
         </ul>
-        {service.upcoming ? null : (
-          <Button
-            href="/#contact"
-            variant="outline"
-            arrow
-            className={`self-start ${stage ? "mt-[4vh]" : "mt-9"}`}
-            onClick={() =>
-              window.dispatchEvent(
-                new CustomEvent(PROJECT_TYPE_EVENT, { detail: service.projectType }),
-              )
-            }
-          >
-            Parlons de votre projet
-          </Button>
-        )}
+        {/* Every service, even one still to come, opens its own page: examples and details. */}
+        <Button
+          href={serviceHref(service)}
+          variant="outline"
+          arrow
+          className={`self-start ${stage ? "mt-[3.4vh]" : "mt-8"}`}
+        >
+          {service.cta}
+          <span className="sr-only"> : {service.title}</span>
+        </Button>
       </div>
     </div>
   );
@@ -289,7 +250,7 @@ function StageProgress({
                     active === i ? "text-cream" : "text-faint group-hover:text-muted"
                   }`}
                 >
-                  {service.title}
+                  {service.shortTitle}
                 </span>
               </button>
             </li>

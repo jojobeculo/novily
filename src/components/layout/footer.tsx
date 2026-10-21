@@ -6,6 +6,7 @@ import { Logo } from "@/components/ui/logo";
 import { SectionLink } from "@/components/ui/section-link";
 import { easeOutExpo, inViewOnce } from "@/lib/motion";
 import { OPEN_CONSENT_EVENT } from "@/lib/consent";
+import { serviceHref, services } from "@/lib/services";
 import { navigation, siteConfig } from "@/lib/site";
 import { useMotionPreference } from "./motion-provider";
 import { useSmoothScroll } from "./smooth-scroll";
@@ -74,6 +75,19 @@ export function Footer({ year }: { year: number }) {
                   <SectionLink href={item.href} className={linkClass}>
                     {item.label}
                   </SectionLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
+          <nav aria-label="Nos services" className="md:col-span-2">
+            <p className="text-xs tracking-[0.14em] text-faint uppercase">Services</p>
+            <ul className="mt-5 flex flex-col gap-1">
+              {services.map((s) => (
+                <li key={s.id}>
+                  <Link href={serviceHref(s)} className={linkClass}>
+                    {s.shortTitle}
+                  </Link>
                 </li>
               ))}
             </ul>

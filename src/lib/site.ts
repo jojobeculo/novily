@@ -10,9 +10,9 @@ export const siteConfig = {
   /** Google Analytics 4 measurement id (G-…). Empty: no analytics, no consent banner. */
   analyticsId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   locale: "fr_FR",
-  title: "Novéo — Studio digital : sites vitrines, e-commerce et expériences web",
+  title: "Novéo — Sites web, accessibilité et IA à Clermont-Ferrand",
   description:
-    "Novéo conçoit des sites web haut de gamme : sites vitrines, boutiques e-commerce et expériences digitales conceptuelles. Design éditorial, SEO et performance maximale.",
+    "Studio digital basé à Clermont-Ferrand : conception de sites web, audits d'accessibilité et de conformité (RGPD, WCAG), transition IA et marketing digital, partout en France.",
   email: "novyli.digital@gmail.com",
   /** Where the studio is based, and the area it serves. */
   location: "Basé à Clermont-Ferrand — partout en France",

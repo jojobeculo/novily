@@ -2,7 +2,8 @@
 
 Site vitrine du studio digital Novéo. Une seule page éditoriale (Hero, Services, Pourquoi nous,
 Réalisations, Méthode, Témoignages, FAQ, Contact), les pages légales (mentions légales,
-politique de confidentialité, CGU, déclaration d'accessibilité) et une page 404.
+politique de confidentialité, CGU, déclaration d'accessibilité), une page par service et une
+page 404.
 
 ## Stack
 
@@ -65,6 +66,7 @@ le cache. Les autres hébergeurs l'ignorent.
 ```
 src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
+    services/[slug]/   une page par service (générée pour chaque entrée de services.ts)
     mentions-legales/, politique-de-confidentialite/, cgu/, accessibilite/
     not-found.tsx      page 404
   components/
@@ -72,12 +74,15 @@ src/
                        SmoothScrollProvider (Lenis), Cursor, PageTransition,
                        CookieConsent, LegalDocument (gabarit des pages légales)
     sections/          une section de la page d'accueil par fichier ; services-showcase.tsx
-                       porte la scène 3D des services
+                       porte la scène 3D des services, service-detail.tsx les pages service,
+                       service-art.tsx leurs illustrations
+    ui/art/            illustrations dessinées des services (SVG animés)
     ui/                briques réutilisables : Button, SectionLink, TextReveal, Reveal,
                        ImageReveal, Magnetic, Accordion, SectionHeader, Logo, CountUp
     seo/               données structurées JSON-LD
   lib/
-    content.ts         tous les textes : services, projets, témoignages, FAQ…
+    content.ts         textes de l'accueil : projets, témoignages, FAQ…
+    services.ts        les services : panneaux de l'accueil et contenu de leurs pages
     site.ts            nom, URL, e-mail, ville, réseaux, navigation
     contact.ts         validation du formulaire
     consent.ts         choix du visiteur sur la mesure d'audience
@@ -90,11 +95,11 @@ brand/                 logos pour l'impression (PNG transparents, SVG)
 
 ## Modifier le contenu
 
-Tous les textes sont dans `src/lib/content.ts` et `src/lib/site.ts`. Pour ajouter une réalisation,
-ajoutez une image 4:3 dans `public/work/` en quatre largeurs, `<nom>-640.webp`, `<nom>-828.webp`,
-`<nom>-1080.webp` et `<nom>-1600.webp` (qualité WebP autour de 75), puis une entrée dans
-`projects` avec `image: "/work/<nom>.webp"` et un `alt` qui décrit l'image. Le filtre se met à
-jour seul selon la catégorie (`vitrine`, `e-commerce`, `conceptuel`).
+Les textes sont dans `src/lib/content.ts`, `src/lib/services.ts` et `src/lib/site.ts`. Pour
+ajouter une réalisation, ajoutez une image 4:3 dans `public/work/` en quatre largeurs,
+`<nom>-640.webp`, `<nom>-828.webp`, `<nom>-1080.webp` et `<nom>-1600.webp` (qualité WebP autour
+de 75), puis une entrée dans `projects` avec `image: "/work/<nom>.webp"` et un `alt` qui décrit
+l'image. Le filtre se met à jour seul selon la catégorie (`vitrine`, `e-commerce`, `conceptuel`).
 
 Les projets et témoignages actuels sont des exemples fictifs. Les photos des maquettes viennent
 d'Unsplash. Avant la mise en ligne :
@@ -133,13 +138,23 @@ par `Button`). Sur l'accueil, il fait glisser la page jusqu'à la section, même
 déjà ce `#`. Depuis une autre page, il ramène sur l'accueil. Les id de section sont listés dans
 `navigation` (`src/lib/site.ts`).
 
-## Services en 3D
+## Services
 
-Sur ordinateur et tablette, les services défilent dans une scène 3D pilotée par le scroll
-(`services-showcase.tsx`, styles `services-*` dans `globals.css`). Chaque service ajouté dans
-`services` (`src/lib/content.ts`) prend sa place sans autre réglage : la hauteur de la section
-suit leur nombre. `showcase` choisit la réalisation qui illustre le service. Sur mobile, avec
-« réduire les animations » ou sans support de la 3D CSS, les services s'affichent en liste.
+Cinq services, dans l'ordre de `src/lib/services.ts` : conception de sites web, accessibilité
+numérique et conformité, transition IA, marketing digital et motion design, logiciels sur mesure
+(`upcoming: true` : badge « Prochainement », textes au futur).
+
+Sur ordinateur et tablette, ils défilent dans une scène 3D pilotée par le scroll
+(`services-showcase.tsx`, styles `services-*` dans `globals.css`) ; la hauteur de la section suit
+leur nombre. Sur mobile, avec les animations réduites ou sans support de la 3D CSS, ils
+s'affichent en liste. Chaque panneau a un bouton (`cta`) vers la page du service,
+`/services/<id>/` : exemples, expertises, cadre et outils, méthode, questions, puis « Parlons de
+votre projet », qui ouvre le formulaire avec le type de projet (`projectType`) déjà choisi.
+
+Pour ajouter un service : une entrée dans `services`, un `projectType` dans `src/lib/contact.ts`
+si besoin, et une illustration (`art`) : `web` reprend trois réalisations, les autres sont des
+composants de `src/components/ui/art/`. La page, le sitemap et les données structurées suivent
+seuls. Les exemples sont des cas types : ne les présentez pas comme des clients réels.
 
 ## Curseur
 

@@ -9,6 +9,7 @@ import {
   parseContact,
   PROJECT_TYPE_EVENT,
   projectTypes,
+  takeRequestedProjectType,
   type ContactErrors,
   type ProjectType,
 } from "@/lib/contact";
@@ -108,9 +109,16 @@ export function ContactForm() {
     readyAt.current = Date.now();
   }, []);
 
-  // A service card preselects its project type before the page glides here.
+  // A service button preselects its project type, on this page or from a service page.
   useEffect(() => {
-    const onPick = (e: Event) => setProjectType((e as CustomEvent<ProjectType>).detail);
+    const requested = takeRequestedProjectType();
+    // Reading sessionStorage needs the browser: the static HTML has no choice.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (requested) setProjectType(requested);
+    const onPick = (e: Event) => {
+      setProjectType((e as CustomEvent<ProjectType>).detail);
+      takeRequestedProjectType();
+    };
     window.addEventListener(PROJECT_TYPE_EVENT, onPick);
     return () => window.removeEventListener(PROJECT_TYPE_EVENT, onPick);
   }, []);
