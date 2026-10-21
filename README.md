@@ -2,7 +2,7 @@
 
 Site vitrine du studio digital Novéo. Une seule page éditoriale (Hero, Services, Pourquoi nous,
 Réalisations, Méthode, Témoignages, FAQ, Contact), les pages légales (mentions légales,
-politique de confidentialité, CGU) et une page 404.
+politique de confidentialité, CGU, déclaration d'accessibilité) et une page 404.
 
 ## Stack
 
@@ -65,21 +65,23 @@ le cache. Les autres hébergeurs l'ignorent.
 ```
 src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
-    mentions-legales/, politique-de-confidentialite/, cgu/
+    mentions-legales/, politique-de-confidentialite/, cgu/, accessibilite/
     not-found.tsx      page 404
   components/
-    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis),
+    layout/            Navbar, Footer, MotionProvider (réglage des animations),
+                       SmoothScrollProvider (Lenis), Cursor, PageTransition,
                        CookieConsent, LegalDocument (gabarit des pages légales)
     sections/          une section de la page d'accueil par fichier ; services-showcase.tsx
                        porte la scène 3D des services
     ui/                briques réutilisables : Button, SectionLink, TextReveal, Reveal,
-                       ImageReveal, Magnetic, Accordion, SectionHeader, Logo
+                       ImageReveal, Magnetic, Accordion, SectionHeader, Logo, CountUp
     seo/               données structurées JSON-LD
   lib/
     content.ts         tous les textes : services, projets, témoignages, FAQ…
-    site.ts            nom, URL, e-mail, réseaux, navigation
+    site.ts            nom, URL, e-mail, ville, réseaux, navigation
     contact.ts         validation du formulaire
     consent.ts         choix du visiteur sur la mesure d'audience
+    motion-preference.ts  choix du visiteur sur les animations
     image-loader.ts    choisit la bonne largeur d'image WebP
     motion.ts          courbes et réglages d'animation
 public/work/           visuels des réalisations
@@ -141,10 +143,31 @@ suit leur nombre. `showcase` choisit la réalisation qui illustre le service. Su
 
 ## Curseur
 
-Une flèche fine aux couleurs du site (pointe crème, base pervenche), en CSS pur à la fin de
-`globals.css` : le navigateur la dessine lui-même, sans script ni décalage. Sur les liens et les
-boutons, elle se remplit de la couleur d'accent. Les champs de texte gardent le curseur texte, et
-les écrans tactiles ne sont pas concernés.
+Une flèche fine aux couleurs du site (pointe crème, base pervenche), dessinée par
+`src/components/layout/cursor.tsx` dès que la souris bouge. Elle penche légèrement dans le sens du
+mouvement, devient noire cerclée de pervenche sur tout ce qui se clique (lisible sur les boutons
+crème et pervenche comme sur le noir), s'enfonce avec une onde au clic et s'efface quand la souris
+quitte la fenêtre. Les champs de texte gardent le curseur texte du système. Avant le premier
+mouvement, ou sans JavaScript, la même flèche en CSS (fin de `globals.css`) prend le relais. Les
+écrans tactiles ne sont pas concernés.
+
+## Animations et accessibilité
+
+- **Réglage des animations** : le site suit le réglage « réduire les animations » de l'appareil,
+  et l'interrupteur « Réduire les animations » du pied de page permet de choisir (choix gardé dans
+  le navigateur). Animations réduites : défilement natif, services en liste, bandeau immobile,
+  animations CSS figées. `useMotionPreference()` donne l'état aux composants, `html[data-motion]`
+  au CSS.
+- **Transitions de page** : `PageTransition` (API View Transitions) fait glisser le contenu d'une
+  page à l'autre ; l'en-tête reste fixe. Chaque nouvelle page l'enveloppe.
+- **Clavier** : après un lien d'ancre, le focus passe sur la section ; le menu mobile garde le
+  focus tant qu'il est ouvert et le rend au bouton à la fermeture ; l'en-tête réapparaît quand il
+  reçoit le focus.
+- **Formulaire** : le focus va au premier champ en erreur, les erreurs se mettent à jour pendant
+  la saisie, la confirmation est lue par les lecteurs d'écran.
+- **Vérifications** : axe-core (WCAG 2.2 AA) sur toutes les pages, parcours au clavier, écran de
+  320 px, animations réduites. Mettez à jour `src/app/accessibilite/page.tsx` après chaque
+  évolution notable.
 
 ## Logo
 

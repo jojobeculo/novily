@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Screens tall enough for generous vertical spacing in the first screen. */
+@custom-variant tall (@media (min-height: 860px));
+
 @theme {
   /* Palette — monochrome warm, one periwinkle accent used sparingly */
   --color-ink: #000000;
@@ -23,6 +26,12 @@
   --text-display: clamp(2.75rem, 1.4rem + 6.4vw, 8rem);
   --text-display--line-height: 1;
   --text-display--letter-spacing: -0.025em;
+
+  /* Hero headline: the display size, capped by the screen height so the call to
+     action stays in the first screen on laptops. */
+  --text-hero: min(clamp(2.75rem, 1.4rem + 6.4vw, 8rem), 11.5svh);
+  --text-hero--line-height: 1;
+  --text-hero--letter-spacing: -0.025em;
 
   --text-headline: clamp(2.25rem, 1.5rem + 3.6vw, 5rem);
   --text-headline--line-height: 1.04;
@@ -67,6 +76,14 @@
   }
 }
 
+/* Header entrance. Fill "backwards" only: once done, Framer Motion owns the transform again. */
+@keyframes header-in {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+}
+
 @keyframes scroll-cue {
   0% {
     transform: translateY(-100%);
@@ -84,6 +101,8 @@
     background: var(--color-ink);
     color: var(--color-cream);
     scroll-behavior: smooth;
+    /* A focused element is never left under the fixed header. */
+    scroll-padding-top: 6rem;
     -webkit-text-size-adjust: 100%;
     text-rendering: optimizeLegibility;
   }
@@ -107,6 +126,11 @@
     border-radius: 2px;
   }
 
+  /* Sections receive focus after an anchor link, for keyboard and screen reader users only. */
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
+
   /* Lenis drives the scroll: native smooth scrolling would fight it. */
   html.lenis,
   html.lenis body {
@@ -117,6 +141,25 @@
     html {
       scroll-behavior: auto;
     }
+  }
+
+  /*
+   * "Réduire les animations" (footer switch, or the system setting): every CSS
+   * animation jumps to its end state and loops stop. Framer Motion follows the
+   * same choice through MotionConfig.
+   */
+  html[data-motion="reduce"] {
+    scroll-behavior: auto;
+  }
+
+  html[data-motion="reduce"] *,
+  html[data-motion="reduce"] *::before,
+  html[data-motion="reduce"] *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    transition-delay: 0s !important;
   }
 }
 
@@ -129,6 +172,64 @@
 
 @utility section-space {
   padding-block: clamp(7.5rem, 5rem + 10vw, 15rem);
+}
+
+/*
+ * Page transitions (src/components/layout/page-transition.tsx): the old page
+ * lifts away and fades, the new one rises into place. The header is named
+ * "site-header" and stays still.
+ */
+::view-transition {
+  pointer-events: none;
+}
+
+::view-transition-old(.page-exit) {
+  animation: page-out 0.35s var(--ease-in-out-quart) both;
+}
+
+::view-transition-new(.page-enter) {
+  animation: page-in 0.8s var(--ease-out-expo) 0.12s both;
+}
+
+::view-transition-group(site-header) {
+  z-index: 100;
+  animation: none;
+}
+
+::view-transition-old(site-header) {
+  display: none;
+}
+
+::view-transition-new(site-header) {
+  animation: none;
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    translate: 0 -2rem;
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    translate: 0 2.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
+html[data-motion="reduce"]::view-transition-group(*),
+html[data-motion="reduce"]::view-transition-old(*),
+html[data-motion="reduce"]::view-transition-new(*) {
+  animation: none !important;
 }
 
 /*
@@ -198,5 +299,113 @@
 
   :is(input, textarea, [contenteditable="true"]) {
     cursor: text;
+  }
+
+  /*
+   * Once the mouse moves, the drawn arrow (src/components/layout/cursor.tsx)
+   * replaces the CSS one. Text fields keep the system text cursor.
+   */
+  html.has-cursor,
+  html.has-cursor * {
+    cursor: none !important;
+  }
+
+  html.has-cursor
+    :is(
+      input:not([type="checkbox"], [type="radio"], [type="submit"], [type="button"]),
+      textarea,
+      [contenteditable="true"]
+    ) {
+    cursor: text !important;
+  }
+}
+
+.cursor {
+  --lean: 0deg;
+  --scale: 1;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  will-change: transform;
+}
+
+.cursor[data-visible] {
+  opacity: 1;
+}
+
+/* Over a text field, the system text cursor takes over. */
+.cursor[data-state="text"] {
+  opacity: 0;
+}
+
+/* Tip of the arrow (4, 3) sits exactly on the pointer. */
+.cursor-arrow {
+  position: absolute;
+  top: -3px;
+  left: -4px;
+  width: 24px;
+  height: 24px;
+  overflow: visible;
+  transform-origin: 4px 3px;
+  rotate: var(--lean);
+  scale: var(--scale);
+  transition: scale 0.4s var(--ease-out-expo);
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.35));
+}
+
+.cursor-ink {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
+
+.cursor-outline {
+  stroke: rgb(0 0 0 / 0.7);
+  stroke-width: 0.8;
+  transition:
+    stroke 0.35s ease-out,
+    stroke-width 0.35s ease-out;
+}
+
+.cursor[data-state="link"] {
+  --scale: 1.12;
+}
+
+.cursor[data-state="link"] .cursor-ink {
+  opacity: 1;
+}
+
+.cursor[data-state="link"] .cursor-outline {
+  stroke: var(--color-accent);
+  stroke-width: 1.3;
+}
+
+.cursor[data-pressed] {
+  --scale: 0.84;
+}
+
+/* A ring that spreads from the tip on each click. */
+.cursor-ripple {
+  position: absolute;
+  top: -14px;
+  left: -14px;
+  width: 28px;
+  height: 28px;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 9999px;
+  animation: cursor-ripple 0.6s var(--ease-out-expo) forwards;
+}
+
+@keyframes cursor-ripple {
+  from {
+    opacity: 1;
+    transform: scale(0.2);
+  }
+  to {
+    opacity: 0;
+    transform: scale(1);
   }
 }

@@ -23,7 +23,7 @@ function Step({ index, title, description }: { index: number; title: string; des
         <div className="grid gap-4 py-10 pl-8 md:grid-cols-12 md:gap-6 md:py-14 md:pl-12">
           <span
             className={`font-serif text-[clamp(3rem,2rem+4vw,6rem)] leading-none font-light tabular-nums transition-colors duration-700 md:col-span-3 ${
-              current ? "text-cream" : "text-cream/20"
+              current ? "text-cream" : "text-cream/40"
             }`}
           >
             {String(index + 1).padStart(2, "0")}

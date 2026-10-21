@@ -1,5 +1,7 @@
+import { PageTransition } from "@/components/layout/page-transition";
 import { JsonLd } from "@/components/seo/json-ld";
 import { Contact } from "@/components/sections/contact";
+import { Expertise } from "@/components/sections/expertise";
 import { Faq } from "@/components/sections/faq";
 import { Hero } from "@/components/sections/hero";
 import { Process } from "@/components/sections/process";
@@ -10,16 +12,17 @@ import { Work } from "@/components/sections/work";
 
 export default function HomePage() {
   return (
-    <>
+    <PageTransition>
       <JsonLd />
       <Hero />
       <Services />
       <WhyUs />
+      <Expertise />
       <Work />
       <Process />
       <Testimonials />
       <Faq />
       <Contact />
-    </>
+    </PageTransition>
   );
 }

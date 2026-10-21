@@ -3,12 +3,12 @@
 import {
   m,
   useMotionValue,
-  useReducedMotion,
   useScroll,
   useSpring,
   useTransform,
 } from "framer-motion";
 import { useEffect } from "react";
+import { useMotionPreference } from "@/components/layout/motion-provider";
 import { easeOutExpo } from "@/lib/motion";
 
 const rings = [110, 170, 230, 290, 350];
@@ -18,7 +18,7 @@ const rings = [110, 170, 230, 290, 350];
  * with a light parallax. Purely decorative.
  */
 export function HeroVisual() {
-  const reduce = useReducedMotion();
+  const { reduced: reduce } = useMotionPreference();
   const pointerX = useMotionValue(0);
   const pointerY = useMotionValue(0);
   const x = useSpring(pointerX, { stiffness: 40, damping: 20 });

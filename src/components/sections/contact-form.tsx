@@ -1,6 +1,7 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
+import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Magnetic } from "@/components/ui/magnetic";
@@ -31,11 +32,17 @@ const MIN_FILL_MS = 3000;
 
 const MAX_LENGTH: Record<FieldProps["name"], number> = { name: 120, email: 200, company: 120, message: 5000 };
 
+/** Fields in page order: after a failed submit, focus goes to the first one in error. */
+const FIELD_ORDER: ReadonlyArray<FieldProps["name"]> = ["name", "email", "company", "message"];
+
+/** Moves focus to the confirmation as soon as it appears, so it is read out. */
+const focusOnMount = (el: HTMLElement | null) => el?.focus({ preventScroll: true });
+
 function Field({ name, label, error, type = "text", autoComplete, multiline, optional }: FieldProps) {
   const id = `contact-${name}`;
   const errorId = `${id}-error`;
   const inputClass =
-    "peer w-full resize-none border-0 border-b border-line bg-transparent pt-8 pb-3 text-lg text-cream outline-none transition-colors duration-500 placeholder:text-transparent focus:border-transparent focus-visible:outline-none";
+    "peer w-full resize-none border-0 border-b border-line bg-transparent pt-8 pb-3 text-lg text-cream outline-none transition-colors duration-500 placeholder:text-transparent focus:border-transparent focus-visible:outline-none aria-[invalid=true]:border-accent/60";
 
   return (
     <div className="relative">
@@ -68,14 +75,14 @@ function Field({ name, label, error, type = "text", autoComplete, multiline, opt
       {/* Label floats up when the field has focus or content. */}
       <label
         htmlFor={id}
-        className="pointer-events-none absolute top-1 left-0 origin-left text-xs tracking-[0.14em] text-faint uppercase transition-all duration-500 ease-out-expo peer-placeholder-shown:top-8 peer-placeholder-shown:text-lg peer-placeholder-shown:tracking-normal peer-placeholder-shown:normal-case peer-focus:top-1 peer-focus:text-xs peer-focus:tracking-[0.14em] peer-focus:uppercase"
+        className="pointer-events-none absolute top-1 left-0 origin-left text-xs tracking-[0.14em] text-faint uppercase transition-all duration-500 ease-out-expo peer-placeholder-shown:top-8 peer-placeholder-shown:text-lg peer-placeholder-shown:tracking-normal peer-placeholder-shown:normal-case peer-focus:top-1 peer-focus:text-xs peer-focus:tracking-[0.14em] peer-focus:text-cream peer-focus:uppercase"
       >
         {label}
         {optional ? <span className="ml-2">(facultatif)</span> : null}
       </label>
       <span
         aria-hidden
-        className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-cream transition-transform duration-700 ease-out-expo peer-focus:scale-x-100"
+        className="absolute bottom-0 left-0 h-px w-full origin-left scale-x-0 bg-accent transition-transform duration-700 ease-out-expo peer-focus:scale-x-100"
       />
       {error ? (
         <p id={errorId} className="mt-2 text-sm text-accent">
@@ -90,6 +97,11 @@ export function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<ContactErrors>({});
   const [projectType, setProjectType] = useState<ProjectType | "">("");
+  // After a first failed submit, errors update as the visitor types.
+  const [checked, setChecked] = useState(false);
+  // E-mail fallback: the prepared message, ready to copy if no mail app opens.
+  const [draft, setDraft] = useState("");
+  const [copied, setCopied] = useState(false);
   // When the form became usable: a submission within seconds of it comes from a bot.
   const readyAt = useRef(0);
   useEffect(() => {
@@ -110,6 +122,9 @@ export function ContactForm() {
     const parsed = parseContact({ ...values, projectType });
     if (!parsed.ok) {
       setErrors(parsed.errors);
+      setChecked(true);
+      const first = FIELD_ORDER.find((name) => parsed.errors[name]);
+      if (first) form.querySelector<HTMLElement>(`[name="${first}"]`)?.focus();
       return;
     }
     setErrors({});
@@ -134,6 +149,7 @@ export function ContactForm() {
         ...(parsed.data.projectType ? [`Type de projet : ${parsed.data.projectType}`] : []),
       ].join("\n");
       window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setDraft(`${subject}\n\n${body}`);
       setStatus("mailto");
       return;
     }
@@ -147,6 +163,7 @@ export function ContactForm() {
         signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error(String(res.status));
+      setChecked(false);
       form.reset();
       setProjectType("");
       setStatus("sent");
@@ -155,11 +172,28 @@ export function ContactForm() {
     }
   }
 
+  function revalidate(form: HTMLFormElement) {
+    if (!checked) return;
+    const parsed = parseContact({ ...Object.fromEntries(new FormData(form)), projectType });
+    setErrors(parsed.ok ? {} : parsed.errors);
+  }
+
+  async function copyDraft() {
+    try {
+      await navigator.clipboard.writeText(`${siteConfig.email}\n\n${draft}`);
+      setCopied(true);
+    } catch {
+      // Clipboard refused: the address stays visible and selectable.
+    }
+  }
+
   return (
     <AnimatePresence mode="wait" initial={false}>
       {status === "sent" || status === "mailto" ? (
         <m.div
           key="sent"
+          ref={focusOnMount}
+          tabIndex={-1}
           role="status"
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
@@ -184,6 +218,13 @@ export function ContactForm() {
                 Votre message est prêt à partir vers {siteConfig.email} : il ne reste qu&apos;à
                 l&apos;envoyer. Nous revenons vers vous sous 24 heures ouvrées.
               </p>
+              <p className="mt-8 max-w-md text-sm leading-relaxed text-faint">
+                Rien ne s&apos;est ouvert ? Copiez votre message et collez-le dans votre
+                messagerie habituelle.
+              </p>
+              <Button variant="outline" size="sm" className="mt-5 self-start" onClick={copyDraft}>
+                <span aria-live="polite">{copied ? "Message copié" : "Copier le message"}</span>
+              </Button>
             </>
           )}
         </m.div>
@@ -192,6 +233,7 @@ export function ContactForm() {
           key="form"
           noValidate
           onSubmit={handleSubmit}
+          onChange={(e) => revalidate(e.currentTarget)}
           exit={{ opacity: 0, y: -16 }}
           transition={{ duration: 0.5, ease: easeOutExpo }}
           className="flex flex-col gap-8"
@@ -250,7 +292,14 @@ export function ContactForm() {
 
           <div className="flex flex-col gap-6 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-xs text-xs leading-relaxed text-faint">
-              Vos données servent uniquement à vous répondre. Elles ne sont jamais partagées.
+              Vos données servent uniquement à répondre à votre demande : elles ne sont ni vendues
+              ni cédées.{" "}
+              <Link
+                href="/politique-de-confidentialite/"
+                className="text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-cream hover:decoration-accent"
+              >
+                En savoir plus
+              </Link>
             </p>
             <Magnetic>
               <Button type="submit" arrow disabled={status === "sending"}>

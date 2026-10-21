@@ -27,12 +27,9 @@ function ProjectCard({ project }: { project: Project }) {
       />
       <div className="mt-7 flex items-start justify-between gap-6">
         <div>
-          <h3 className="relative inline-block font-serif text-[clamp(1.5rem,1.2rem+1vw,2.25rem)] leading-tight font-light">
+          {/* No link-style underline: the cards show work, they do not lead anywhere. */}
+          <h3 className="font-serif text-[clamp(1.5rem,1.2rem+1vw,2.25rem)] leading-tight font-light">
             {project.name}
-            <span
-              aria-hidden
-              className="absolute inset-x-0 -bottom-0.5 h-px origin-left scale-x-0 bg-cream/40 transition-transform duration-1000 ease-out-expo group-hover:scale-x-100"
-            />
           </h3>
           <p className="mt-3 max-w-sm text-[0.9375rem] leading-relaxed text-muted transition-colors duration-700 group-hover:text-cream/85">
             {project.summary}

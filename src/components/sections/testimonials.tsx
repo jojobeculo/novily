@@ -1,11 +1,14 @@
 "use client";
 
 import { AnimatePresence, m, type Variants } from "framer-motion";
-import { useState } from "react";
+import { useRef, useState, type PointerEvent } from "react";
 import { Reveal } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-header";
 import { testimonials } from "@/lib/content";
 import { easeOutExpo } from "@/lib/motion";
+
+/** Horizontal travel, in pixels, that turns a touch drag into a swipe. */
+const SWIPE = 50;
 
 // `custom` carries the direction so the leaving quote exits the right way.
 const slide: Variants = {
@@ -45,6 +48,18 @@ export function Testimonials() {
 
   const go = (step: 1 | -1) => setState(([i]) => [(i + step + count) % count, step]);
 
+  // Touch screens: swipe left for the next quote, right for the previous one.
+  const swipeStart = useRef<number | null>(null);
+  const onPointerDown = (e: PointerEvent) => {
+    swipeStart.current = e.pointerType === "mouse" ? null : e.clientX;
+  };
+  const onPointerUp = (e: PointerEvent) => {
+    if (swipeStart.current === null) return;
+    const dx = e.clientX - swipeStart.current;
+    swipeStart.current = null;
+    if (Math.abs(dx) > SWIPE) go(dx < 0 ? 1 : -1);
+  };
+
   return (
     <section aria-labelledby="testimonials-title" className="section-space">
       <div className="container-page">
@@ -60,7 +75,15 @@ export function Testimonials() {
             &ldquo;
           </span>
 
-          <div aria-live="polite" className="relative mt-4 grid min-h-[22rem] md:min-h-[20rem]">
+          <div
+            aria-live="polite"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerCancel={() => {
+              swipeStart.current = null;
+            }}
+            className="relative mt-4 grid min-h-[22rem] touch-pan-y md:min-h-[20rem]"
+          >
             <AnimatePresence mode="wait" initial={false} custom={direction}>
               <m.figure
                 key={index}
@@ -87,7 +110,12 @@ export function Testimonials() {
           <div className="mt-12 flex items-center justify-center gap-6">
             <ArrowButton direction="prev" onClick={() => go(-1)} />
             <p className="flex items-center gap-4 text-xs text-faint tabular-nums">
-              <span className="text-cream">{String(index + 1).padStart(2, "0")}</span>
+              <span className="sr-only">
+                Témoignage {index + 1} sur {count}
+              </span>
+              <span aria-hidden className="text-cream">
+                {String(index + 1).padStart(2, "0")}
+              </span>
               <span aria-hidden className="relative h-px w-16 bg-line">
                 <m.span
                   className="absolute inset-y-0 left-0 bg-cream"
@@ -95,7 +123,7 @@ export function Testimonials() {
                   transition={{ duration: 0.8, ease: easeOutExpo }}
                 />
               </span>
-              <span>{String(count).padStart(2, "0")}</span>
+              <span aria-hidden>{String(count).padStart(2, "0")}</span>
             </p>
             <ArrowButton direction="next" onClick={() => go(1)} />
           </div>

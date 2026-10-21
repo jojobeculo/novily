@@ -23,7 +23,7 @@ export function Hero() {
       ref={ref}
       id="accueil"
       aria-labelledby="hero-title"
-      className="relative flex min-h-svh flex-col overflow-hidden pt-32 pb-10 md:pb-14"
+      className="relative flex min-h-svh flex-col overflow-hidden pt-28 pb-10 tall:pb-14"
     >
       <HeroVisual />
 
@@ -32,15 +32,8 @@ export function Hero() {
         className="container-page relative flex flex-1 flex-col justify-end"
       >
         <div className={enter} style={delay(0.1)}>
-          <p className="mb-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-eyebrow uppercase text-faint md:mb-14">
-            <span>Création de sites web sur mesure</span>
-            <span className="flex items-center gap-2.5 text-muted">
-              <span className="relative flex size-1.5">
-                <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
-                <span className="relative size-1.5 rounded-full bg-accent" />
-              </span>
-              {siteConfig.location}
-            </span>
+          <p className="mb-8 text-eyebrow uppercase text-faint tall:mb-12">
+            Création de sites web sur mesure
           </p>
         </div>
 
@@ -54,10 +47,10 @@ export function Hero() {
             "Nous concevons des expériences digitales qui ",
             { accent: "marquent les esprits." },
           ]}
-          className="max-w-[15ch] font-serif text-display font-light text-balance"
+          className="max-w-[15ch] font-serif text-hero font-light text-balance"
         />
 
-        <div className="mt-14 grid gap-10 border-t border-line pt-10 md:mt-20 md:grid-cols-12 md:items-end md:gap-6">
+        <div className="mt-10 grid gap-8 border-t border-line pt-8 md:grid-cols-12 md:items-end md:gap-6 tall:mt-16 tall:pt-10">
           <div className={`md:col-span-5 ${enter}`} style={delay(0.6)}>
             <p className="max-w-md text-lead text-muted">
               Novéo imagine et développe des sites web élégants, rapides et pensés pour
@@ -67,7 +60,7 @@ export function Hero() {
 
           <div
             style={delay(0.72)}
-            className={`flex flex-wrap items-center gap-3 md:col-span-7 md:justify-end ${enter}`}
+            className={`flex flex-col items-start gap-4 md:col-span-7 md:items-end ${enter}`}
           >
             {/* One call to action across the site: every conversion button says the same thing. */}
             <Magnetic>
@@ -75,6 +68,13 @@ export function Hero() {
                 Parlons de votre projet
               </Button>
             </Magnetic>
+            <p className="flex items-center gap-2.5 text-sm text-faint">
+              <span aria-hidden className="relative flex size-1.5">
+                <span className="absolute inset-0 animate-ping rounded-full bg-accent opacity-60 motion-reduce:animate-none" />
+                <span className="relative size-1.5 rounded-full bg-accent" />
+              </span>
+              {siteConfig.location}
+            </p>
           </div>
         </div>
       </m.div>

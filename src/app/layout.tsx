@@ -2,9 +2,11 @@ import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { CookieConsent } from "@/components/layout/cookie-consent";
+import { Cursor } from "@/components/layout/cursor";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
 import { SmoothScrollProvider } from "@/components/layout/smooth-scroll";
+import { motionInitScript } from "@/lib/motion-preference";
 import { siteConfig } from "@/lib/site";
 import "./globals.css";
 
@@ -39,7 +41,7 @@ export const metadata: Metadata = {
     "site vitrine",
     "site e-commerce",
     "design web haut de gamme",
-    "agence web à distance",
+    "agence web Clermont-Ferrand",
     "agence web France",
     "SEO",
   ],
@@ -76,11 +78,20 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   // Static export: the year is set at build time, and each deploy rebuilds the site.
   const year = new Date().getFullYear();
   return (
+    // The init script sets data-motion before React hydrates.
     <html
       lang="fr"
       data-scroll-behavior="smooth"
       className={`${plexSerif.variable} ${plexSans.variable}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: motionInitScript }} />
+        {/* Without JavaScript, reveal animations never run: show their content as is. */}
+        <noscript>
+          <style>{`[style*="opacity:0"],[style*="clip-path"]{opacity:1!important;transform:none!important;clip-path:none!important}`}</style>
+        </noscript>
+      </head>
       <body className="min-h-svh bg-ink text-cream">
         <a
           href="#contenu"
@@ -91,10 +102,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <MotionProvider>
           <SmoothScrollProvider>
             <Navbar />
-            <main id="contenu">{children}</main>
+            <main id="contenu" tabIndex={-1} className="outline-none">
+              {children}
+            </main>
             <Footer year={year} />
           </SmoothScrollProvider>
           <CookieConsent />
+          <Cursor />
         </MotionProvider>
       </body>
     </html>

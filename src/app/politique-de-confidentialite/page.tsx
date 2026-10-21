@@ -18,7 +18,7 @@ const sections: LegalSection[] = [
     title: "Responsable du traitement",
     body: (
       <p>
-        {siteConfig.legalName}, [adresse]. Pour toute question sur vos données : {mail}.
+        {siteConfig.legalName}, [adresse], {siteConfig.city}. Pour toute question sur vos données : {mail}.
       </p>
     ),
   },
@@ -92,20 +92,35 @@ const sections: LegalSection[] = [
             Mesure d&apos;audience : cookies valables 13 mois au plus, données conservées 14 mois.
           </li>
         ) : null}
-        <li>Votre choix concernant les cookies : 13 mois, puis nous vous le redemandons.</li>
+        {analytics ? (
+          <li>Votre choix concernant les cookies : 13 mois, puis nous vous le redemandons.</li>
+        ) : null}
+        <li>
+          Réglage « Réduire les animations » : jusqu&apos;à ce que vous le changiez ou effaciez
+          les données de votre navigateur.
+        </li>
       </ul>
     ),
   },
   {
     title: "Cookies",
-    body: analytics ? (
-      <p>
-        Aucun cookie n&apos;est déposé tant que vous n&apos;avez pas accepté la mesure
-        d&apos;audience. Votre choix est enregistré dans votre navigateur, sans cookie. Vous
-        pouvez le modifier à tout moment depuis le lien « Cookies » en bas de chaque page.
-      </p>
-    ) : (
-      <p>Ce site ne dépose aucun cookie et n&apos;utilise aucun traceur.</p>
+    body: (
+      <>
+        {analytics ? (
+          <p>
+            Aucun cookie n&apos;est déposé tant que vous n&apos;avez pas accepté la mesure
+            d&apos;audience. Votre choix est enregistré dans votre navigateur, sans cookie. Vous
+            pouvez le modifier à tout moment depuis le lien « Cookies » en bas de chaque page.
+          </p>
+        ) : (
+          <p>Ce site ne dépose aucun cookie et n&apos;utilise aucun traceur.</p>
+        )}
+        <p>
+          Si vous activez « Réduire les animations » en bas de page, ce réglage est gardé dans
+          votre navigateur pour s&apos;appliquer à vos prochaines visites. Il ne quitte pas votre
+          appareil et ne sert à rien d&apos;autre.
+        </p>
+      </>
     ),
   },
   {

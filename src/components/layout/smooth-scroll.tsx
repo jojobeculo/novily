@@ -1,9 +1,9 @@
 "use client";
 
-import { useReducedMotion } from "framer-motion";
 import Lenis from "lenis";
 import "lenis/dist/lenis.css";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { useMotionPreference } from "./motion-provider";
 
 type SmoothScroll = {
   /** Glides to an element or a y position. */
@@ -21,10 +21,10 @@ const easeInOutCubic = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2
 
 /**
  * Inertial page scroll (Lenis) and eased anchor navigation.
- * With "reduce motion", the page keeps the native scroll and jumps to anchors.
+ * With reduced motion, the page keeps the native scroll and jumps to anchors.
  */
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const reduce = useReducedMotion();
+  const { reduced: reduce } = useMotionPreference();
   const lenisRef = useRef<Lenis | null>(null);
   const autoRef = useRef(false);
 

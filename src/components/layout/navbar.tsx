@@ -8,7 +8,7 @@ import {
   useSpring,
 } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import { Magnetic } from "@/components/ui/magnetic";
@@ -56,6 +56,8 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const active = useActiveSection();
   const { setLocked, isAutoScrolling } = useSmoothScroll();
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useMotionValueEvent(scrollY, "change", (y) => {
     const previous = scrollY.getPrevious() ?? 0;
@@ -67,12 +69,26 @@ export function Navbar() {
 
   useEffect(() => {
     if (!open) return;
+    const menu = menuRef.current;
+    const toggle = toggleRef.current;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
     setLocked(true);
     window.addEventListener("keydown", onKey);
+    // The page behind the menu can be neither reached with Tab nor read.
+    const background = document.querySelectorAll<HTMLElement>('main, footer, a[href="#contenu"]');
+    background.forEach((el) => (el.inert = true));
+    const focusFirst = window.setTimeout(
+      () => menu?.querySelector<HTMLElement>("a[href]")?.focus(),
+      350,
+    );
     return () => {
       setLocked(false);
       window.removeEventListener("keydown", onKey);
+      background.forEach((el) => (el.inert = false));
+      window.clearTimeout(focusFirst);
+      // Closed without following a link (Escape, toggle): focus goes back to the toggle.
+      const current = document.activeElement;
+      if (!current || current === document.body || menu?.contains(current)) toggle?.focus();
     };
   }, [open, setLocked]);
 
@@ -81,10 +97,15 @@ export function Navbar() {
   return (
     <>
       <m.header
-        initial={{ y: -24, opacity: 0 }}
-        animate={{ y: hidden && !open ? "-100%" : 0, opacity: 1 }}
+        initial={false}
+        animate={{ y: hidden && !open ? "-100%" : 0 }}
         transition={{ duration: 0.8, ease: easeOutExpo }}
-        className={`fixed inset-x-0 top-0 z-50 transition-[background-color,backdrop-filter] duration-700 ease-out-expo ${
+        // Keyboard focus inside the header brings it back into view.
+        onFocus={() => setHidden(false)}
+        // Named view transition: the header stays still while pages change beneath it.
+        style={{ viewTransitionName: "site-header" }}
+        // CSS entrance: the header shows on first paint, without waiting for hydration.
+        className={`fixed inset-x-0 top-0 z-50 animate-[header-in_0.9s_cubic-bezier(0.16,1,0.3,1)_backwards] transition-[background-color,backdrop-filter] duration-700 ease-out-expo ${
           scrolled && !open ? "bg-ink/60 backdrop-blur-xl" : "bg-transparent"
         }`}
       >
@@ -133,6 +154,7 @@ export function Navbar() {
             </div>
 
             <button
+              ref={toggleRef}
               type="button"
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
@@ -168,6 +190,7 @@ export function Navbar() {
       <AnimatePresence>
         {open ? (
           <m.div
+            ref={menuRef}
             id="mobile-menu"
             key="mobile-menu"
             className="fixed inset-0 z-40 flex flex-col bg-ink pt-28 pb-10 lg:hidden"
@@ -176,29 +199,31 @@ export function Navbar() {
             exit={{ clipPath: "inset(0 0 100% 0)" }}
             transition={{ duration: 0.8, ease: easeInOutQuart }}
           >
-            <ul className="container-page flex flex-col gap-2">
-              {navigation.map((item, i) => (
-                <li key={item.id} className="overflow-hidden">
-                  <m.div
-                    initial={{ y: "100%" }}
-                    animate={{ y: 0 }}
-                    exit={{ y: "100%", transition: { duration: 0.3 } }}
-                    transition={{ duration: 0.9, ease: easeOutExpo, delay: 0.25 + i * 0.06 }}
-                  >
-                    <SectionLink
-                      href={item.href}
-                      onClick={close}
-                      className={`flex items-baseline gap-4 py-1 font-serif text-[clamp(2.5rem,11vw,4rem)] leading-tight font-light transition-opacity active:opacity-60 ${
-                        active === item.id ? "text-cream" : "text-cream/70"
-                      }`}
+            <nav aria-label="Menu" className="container-page">
+              <ul className="flex flex-col gap-2">
+                {navigation.map((item, i) => (
+                  <li key={item.id} className="overflow-hidden">
+                    <m.div
+                      initial={{ y: "100%" }}
+                      animate={{ y: 0 }}
+                      exit={{ y: "100%", transition: { duration: 0.3 } }}
+                      transition={{ duration: 0.9, ease: easeOutExpo, delay: 0.25 + i * 0.06 }}
                     >
-                      <span className="font-sans text-xs text-faint">0{i + 1}</span>
-                      {item.label}
-                    </SectionLink>
-                  </m.div>
-                </li>
-              ))}
-            </ul>
+                      <SectionLink
+                        href={item.href}
+                        onClick={close}
+                        className={`flex items-baseline gap-4 py-1 font-serif text-[clamp(2.5rem,11vw,4rem)] leading-tight font-light transition-opacity active:opacity-60 ${
+                          active === item.id ? "text-cream" : "text-cream/70"
+                        }`}
+                      >
+                        <span className="font-sans text-xs text-faint">0{i + 1}</span>
+                        {item.label}
+                      </SectionLink>
+                    </m.div>
+                  </li>
+                ))}
+              </ul>
+            </nav>
             <m.div
               className="container-page mt-auto flex flex-col gap-6"
               initial={{ opacity: 0 }}

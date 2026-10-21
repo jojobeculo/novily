@@ -16,6 +16,7 @@ import {
   type CSSProperties,
   type RefObject,
 } from "react";
+import { useMotionPreference } from "@/components/layout/motion-provider";
 import { useSmoothScroll } from "@/components/layout/smooth-scroll";
 import { Button } from "@/components/ui/button";
 import { Reveal } from "@/components/ui/reveal";
@@ -31,8 +32,8 @@ const pad = (n: number) => String(n).padStart(2, "0");
 /* short screens, no CSS 3D).                                           */
 /* ------------------------------------------------------------------ */
 
-const IMMERSIVE_QUERY =
-  "(min-width: 768px) and (min-height: 600px) and (prefers-reduced-motion: no-preference)";
+// Screen size and 3D support only: reduced motion comes from useMotionPreference.
+const IMMERSIVE_QUERY = "(min-width: 768px) and (min-height: 600px)";
 
 function subscribe(onChange: () => void) {
   const query = window.matchMedia(IMMERSIVE_QUERY);
@@ -369,7 +370,9 @@ function ServicesStage() {
  * does not fit.
  */
 export function ServicesShowcase() {
-  const immersive = useSyncExternalStore(subscribe, getImmersive, getServerImmersive);
+  const fits = useSyncExternalStore(subscribe, getImmersive, getServerImmersive);
+  const { reduced } = useMotionPreference();
+  const immersive = fits && !reduced;
 
   // The stage is taller than the list it replaces: keep a deep link (#faq…) on its target.
   useEffect(() => {

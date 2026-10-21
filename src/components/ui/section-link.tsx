@@ -28,6 +28,12 @@ export function SectionLink({ href, onClick, ...props }: SectionLinkProps) {
     event.preventDefault();
     scrollTo(target);
     window.history.replaceState(window.history.state, "", `#${hash}`);
+    // Keyboard and screen reader users continue from the section, not from the link.
+    // Deferred: a closing mobile menu makes the page focusable again first.
+    window.setTimeout(() => {
+      if (!target.hasAttribute("tabindex")) target.setAttribute("tabindex", "-1");
+      target.focus({ preventScroll: true });
+    }, 60);
   }
 
   return <Link href={href} onClick={handleClick} {...props} />;
