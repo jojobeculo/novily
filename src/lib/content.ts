@@ -262,6 +262,6 @@ export const faqs = [
   {
     question: "Travaillez-vous avec des entreprises partout en France ?",
     answer:
-      "Oui. Novéo est un studio entièrement à distance : nous accompagnons des entreprises dans toute la France. Les échanges se font en visioconférence, par téléphone et par e-mail, avec un interlocuteur unique du premier appel à la mise en ligne.",
+      "Oui. Basé à Clermont-Ferrand, Novéo accompagne des entreprises dans toute la France. Les échanges se font en visioconférence, par téléphone et par e-mail, avec un interlocuteur unique du premier appel à la mise en ligne.",
   },
 ] as const;

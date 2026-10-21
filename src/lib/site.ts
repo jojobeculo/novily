@@ -14,8 +14,9 @@ export const siteConfig = {
   description:
     "Novéo conçoit des sites web haut de gamme : sites vitrines, boutiques e-commerce et expériences digitales conceptuelles. Design éditorial, SEO et performance maximale.",
   email: "novyli.digital@gmail.com",
-  /** The studio works fully remote: never tie it to a city. */
-  location: "Studio 100 % à distance — partout en France",
+  /** Where the studio is based, and the area it serves. */
+  location: "Basé à Clermont-Ferrand — partout en France",
+  city: "Clermont-Ferrand",
   /**
    * The studio's social profiles, e.g. { label: "Instagram", href: "https://…" }.
    * The footer column and the JSON-LD sameAs only appear when the list is not empty.

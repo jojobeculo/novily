@@ -16,6 +16,12 @@ const graph = {
       image: `${siteConfig.url}/opengraph-image.jpg`,
       description: siteConfig.description,
       email: siteConfig.email,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: siteConfig.city,
+        addressRegion: "Auvergne-Rhône-Alpes",
+        addressCountry: "FR",
+      },
       areaServed: { "@type": "Country", name: "France" },
       ...(siteConfig.socials.length > 0 ? { sameAs: siteConfig.socials.map((s) => s.href) } : {}),
       hasOfferCatalog: {

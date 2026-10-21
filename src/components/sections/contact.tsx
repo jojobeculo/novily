@@ -45,7 +45,7 @@ export function Contact() {
             <div>
               <p className="text-xs tracking-[0.14em] text-faint uppercase">Fonctionnement</p>
               <p className="mt-3 text-body text-muted">
-                Studio 100 % à distance, aux côtés d&apos;entreprises partout en France.
+                Basés à Clermont-Ferrand, aux côtés d&apos;entreprises partout en France.
                 <br />
                 Du lundi au vendredi, 9 h – 19 h.
               </p>

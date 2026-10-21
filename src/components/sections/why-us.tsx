@@ -1,3 +1,4 @@
+import { CountUp } from "@/components/ui/count-up";
 import { Reveal, RevealLine } from "@/components/ui/reveal";
 import { Eyebrow } from "@/components/ui/section-header";
 import { TextReveal } from "@/components/ui/text-reveal";
@@ -20,7 +21,7 @@ export function WhyUs() {
             />
             <Reveal delay={0.15}>
               <p className="mt-10 max-w-md text-lead text-muted">
-                Novéo est un studio indépendant, entièrement à distance, qui accompagne des
+                Novéo est un studio indépendant basé à Clermont-Ferrand, qui accompagne des
                 entreprises partout en France. Notre conviction : un site web doit être aussi beau
                 qu&apos;efficace. Nous travaillons avec peu de clients à la fois, pour donner à
                 chacun toute notre attention.
@@ -32,8 +33,8 @@ export function WhyUs() {
                 <Reveal key={c.label} delay={0.1 * i}>
                   <dt className="sr-only">{c.label}</dt>
                   <dd>
-                    <span className="block font-serif text-[clamp(1.75rem,1.2rem+1.6vw,2.75rem)] leading-none font-light">
-                      {c.value}
+                    <span className="block font-serif text-[clamp(1.75rem,1.2rem+1.6vw,2.75rem)] leading-none font-light tabular-nums">
+                      <CountUp value={c.value} />
                     </span>
                     <span className="mt-3 block text-xs leading-relaxed text-faint">{c.label}</span>
                   </dd>

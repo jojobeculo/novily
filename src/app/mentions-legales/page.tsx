@@ -18,7 +18,7 @@ export default function LegalNoticePage() {
       sections={[
         {
           title: "Éditeur du site",
-          body: `${siteConfig.legalName} — [forme juridique, capital social]. Siège social : [adresse]. SIRET : [numéro]. Directeur de la publication : [nom]. Contact : ${siteConfig.email}.`,
+          body: `${siteConfig.legalName} — [forme juridique, capital social]. Siège social : [adresse], ${siteConfig.city}. SIRET : [numéro]. Directeur de la publication : [nom]. Contact : ${siteConfig.email}.`,
         },
         {
           title: "Hébergement",
