@@ -117,7 +117,7 @@ export const projects: readonly Project[] = [
     category: "vitrine",
     categoryLabel: "Site vitrine",
     year: 2026,
-    image: "/work/maison-aubrac.jpg",
+    image: "/work/maison-aubrac.webp",
     imageAlt: "Page d'accueil du site Maison Aubrac : salle de restaurant tamisée et titre en serif.",
   },
   {
@@ -127,7 +127,7 @@ export const projects: readonly Project[] = [
     category: "e-commerce",
     categoryLabel: "E-commerce",
     year: 2026,
-    image: "/work/seve.jpg",
+    image: "/work/seve.webp",
     imageAlt: "Boutique en ligne Sève : flacon ambré sur fond clair et titre « L'essentiel, rien de plus ».",
   },
   {
@@ -137,7 +137,7 @@ export const projects: readonly Project[] = [
     category: "conceptuel",
     categoryLabel: "Site conceptuel",
     year: 2025,
-    image: "/work/orbe.jpg",
+    image: "/work/orbe.webp",
     imageAlt: "Site du festival Orbe : foule de concert sous les lumières et titre monumental.",
   },
   {
@@ -147,7 +147,7 @@ export const projects: readonly Project[] = [
     category: "vitrine",
     categoryLabel: "Site vitrine",
     year: 2025,
-    image: "/work/linea.jpg",
+    image: "/work/linea.webp",
     imageAlt: "Site de l'Atelier Linéa : maison contemporaine en bois et titre « Architecture du calme ».",
   },
   {
@@ -157,7 +157,7 @@ export const projects: readonly Project[] = [
     category: "e-commerce",
     categoryLabel: "E-commerce",
     year: 2025,
-    image: "/work/halden.jpg",
+    image: "/work/halden.webp",
     imageAlt: "Boutique Halden Audio : casque noir sur fond jaune et bouton « Ajouter au panier ».",
   },
   {
@@ -167,7 +167,7 @@ export const projects: readonly Project[] = [
     category: "conceptuel",
     categoryLabel: "Site conceptuel",
     year: 2024,
-    image: "/work/vantal.jpg",
+    image: "/work/vantal.webp",
     imageAlt: "Site de la Galerie Vantal : peinture abstraite colorée et titre « Couleur brute ».",
   },
 ];

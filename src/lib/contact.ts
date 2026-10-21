@@ -16,7 +16,7 @@ const text = (value: unknown) => (typeof value === "string" ? value.trim() : "")
 
 /**
  * Parses untrusted input into a ContactRequest.
- * Shared by the form (inline errors) and the API route (boundary check).
+ * The form calls it before it sends anything.
  */
 export function parseContact(input: Record<string, unknown>):
   | { ok: true; data: ContactRequest }

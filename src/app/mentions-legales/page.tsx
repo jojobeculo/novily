@@ -4,7 +4,7 @@ import { siteConfig } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Mentions légales",
   description: `Mentions légales et politique de confidentialité du site ${siteConfig.name}.`,
-  alternates: { canonical: "/mentions-legales" },
+  alternates: { canonical: `${siteConfig.url}/mentions-legales` },
 };
 
 const sections = [

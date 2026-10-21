@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { cacheLife } from "next/cache";
 import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { Footer } from "@/components/layout/footer";
@@ -23,7 +22,8 @@ const plexSans = IBM_Plex_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteConfig.url),
+  // Origin only: Next adds the base path to file-based images (OG image, icons) itself.
+  metadataBase: new URL(new URL(siteConfig.url).origin),
   title: {
     default: siteConfig.title,
     template: `%s — ${siteConfig.name}`,
@@ -42,11 +42,11 @@ export const metadata: Metadata = {
   ],
   authors: [{ name: siteConfig.legalName, url: siteConfig.url }],
   creator: siteConfig.legalName,
-  alternates: { canonical: "/" },
+  alternates: { canonical: `${siteConfig.url}/` },
   openGraph: {
     type: "website",
     locale: siteConfig.locale,
-    url: "/",
+    url: `${siteConfig.url}/`,
     siteName: siteConfig.name,
     title: siteConfig.title,
     description: siteConfig.description,
@@ -69,14 +69,9 @@ export const viewport: Viewport = {
   colorScheme: "dark",
 };
 
-async function currentYear() {
-  "use cache";
-  cacheLife("days");
-  return new Date().getFullYear();
-}
-
-export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const year = await currentYear();
+export default function RootLayout({ children }: LayoutProps<"/">) {
+  // Static export: the year is set at build time, and each deploy rebuilds the site.
+  const year = new Date().getFullYear();
   return (
     <html
       lang="fr"

@@ -5,7 +5,7 @@ Réalisations, Méthode, Témoignages, FAQ, Contact) et une page de mentions lé
 
 ## Stack
 
-- Next.js 16 (App Router, Cache Components) et React 19
+- Next.js 16 (App Router, export statique) et React 19
 - TypeScript
 - Tailwind CSS 4 (jetons de design dans `src/app/globals.css`)
 - Framer Motion (chargé via `LazyMotion`, respecte `prefers-reduced-motion`)
@@ -15,7 +15,7 @@ Réalisations, Méthode, Témoignages, FAQ, Contact) et une page de mentions lé
 ```bash
 npm install
 npm run dev        # http://localhost:3000
-npm run build      # build de production
+npm run build      # export statique dans out/
 npm run lint
 npm run typecheck
 ```
@@ -24,19 +24,34 @@ Copiez `.env.example` vers `.env.local` et renseignez les variables :
 
 | Variable | Rôle |
 |---|---|
-| `NEXT_PUBLIC_SITE_URL` | URL publique : liens canoniques, Open Graph, sitemap |
-| `RESEND_API_KEY` | Clé [Resend](https://resend.com) pour envoyer le formulaire de contact |
-| `CONTACT_TO_EMAIL` | Adresse qui reçoit les demandes |
-| `CONTACT_FROM_EMAIL` | Expéditeur (domaine vérifié dans Resend) |
+| `NEXT_PUBLIC_SITE_URL` | URL publique, sous-chemin compris : liens canoniques, Open Graph, sitemap |
+| `NEXT_PUBLIC_BASE_PATH` | Sous-chemin du site (`/novily` sur GitHub Pages), vide avec un domaine personnalisé |
+| `NEXT_PUBLIC_CONTACT_ENDPOINT` | URL d'un service de formulaire qui accepte du JSON (ex. [Formspree](https://formspree.io)) |
 
-Sans clé Resend, le formulaire affiche l'adresse e-mail du studio comme solution de repli.
+Sans `NEXT_PUBLIC_CONTACT_ENDPOINT`, le formulaire ouvre la messagerie du visiteur avec le
+message pré-rempli.
+
+## Déploiement sur GitHub Pages
+
+Le site est exporté en HTML statique (`output: "export"`) et publié par
+`.github/workflows/deploy.yml` à chaque push sur `main` (ou à la main depuis l'onglet Actions).
+
+1. Dans **Settings → Pages**, choisissez **Source : GitHub Actions**.
+2. Optionnel : dans **Settings → Secrets and variables → Actions → Variables**, créez
+   `CONTACT_ENDPOINT` avec l'URL de votre service de formulaire.
+3. Poussez sur `main`. Le site est publié sur `https://<compte>.github.io/novily/`.
+
+Le workflow récupère le sous-chemin et l'URL auprès de GitHub Pages. Avec un domaine
+personnalisé, le sous-chemin devient vide sans autre réglage.
+
+Un site statique n'a pas de serveur : pas de route API ni d'optimisation d'images à la volée.
+Les images des réalisations sont donc fournies en WebP à trois largeurs (voir ci-dessous).
 
 ## Structure
 
 ```
 src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
-    api/contact/       réception du formulaire
     mentions-legales/
   components/
     layout/            Navbar, Footer, MotionProvider
@@ -47,7 +62,8 @@ src/
   lib/
     content.ts         tous les textes : services, projets, témoignages, FAQ…
     site.ts            nom, URL, e-mail, réseaux, navigation
-    contact.ts         validation partagée du formulaire (client et serveur)
+    contact.ts         validation du formulaire
+    image-loader.ts    choisit la bonne largeur d'image WebP
     motion.ts          courbes et réglages d'animation
 public/work/           visuels des réalisations
 ```
@@ -55,8 +71,9 @@ public/work/           visuels des réalisations
 ## Modifier le contenu
 
 Tous les textes sont dans `src/lib/content.ts` et `src/lib/site.ts`. Pour ajouter une réalisation,
-ajoutez une image 4:3 dans `public/work/` et une entrée dans `projects`. Le filtre se met à jour
-seul selon la catégorie (`vitrine`, `e-commerce`, `conceptuel`).
+ajoutez une image 4:3 dans `public/work/` en trois largeurs, `<nom>-640.webp`, `<nom>-1080.webp`
+et `<nom>-1600.webp`, puis une entrée dans `projects` avec `image: "/work/<nom>.webp"`. Le filtre
+se met à jour seul selon la catégorie (`vitrine`, `e-commerce`, `conceptuel`).
 
 Les projets et témoignages actuels sont des exemples fictifs. Les photos des maquettes viennent
 d'Unsplash. Complétez aussi les champs entre crochets de `src/app/mentions-legales/page.tsx`.

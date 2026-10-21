@@ -8,7 +8,7 @@ import { parseContact, projectTypes, type ContactErrors } from "@/lib/contact";
 import { easeOutExpo } from "@/lib/motion";
 import { siteConfig } from "@/lib/site";
 
-type Status = "idle" | "sending" | "sent" | "error";
+type Status = "idle" | "sending" | "sent" | "mailto" | "error";
 
 type FieldProps = {
   name: "name" | "email" | "company" | "message";
@@ -86,13 +86,37 @@ export function ContactForm() {
       return;
     }
     setErrors({});
-    setStatus("sending");
 
+    // Honeypot: real visitors never see nor fill this field.
+    if (values.website) {
+      setStatus("sent");
+      return;
+    }
+
+    const { name, email, company, message } = parsed.data;
+    const subject = `Nouveau projet — ${name}${company ? ` (${company})` : ""}`;
+
+    // A static site has no server: without a form service, hand over to the e-mail app.
+    if (!siteConfig.contactEndpoint) {
+      const body = [
+        message,
+        "",
+        `${name} — ${email}`,
+        ...(company ? [`Entreprise : ${company}`] : []),
+        ...(parsed.data.projectType ? [`Type de projet : ${parsed.data.projectType}`] : []),
+      ].join("\n");
+      window.location.href = `mailto:${siteConfig.email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setStatus("mailto");
+      return;
+    }
+
+    setStatus("sending");
     try {
-      const res = await fetch("/api/contact", {
+      const res = await fetch(siteConfig.contactEndpoint, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...parsed.data, website: values.website }),
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ ...parsed.data, _subject: subject, _replyto: email }),
+        signal: AbortSignal.timeout(10000),
       });
       if (!res.ok) throw new Error(String(res.status));
       form.reset();
@@ -105,7 +129,7 @@ export function ContactForm() {
 
   return (
     <AnimatePresence mode="wait" initial={false}>
-      {status === "sent" ? (
+      {status === "sent" || status === "mailto" ? (
         <m.div
           key="sent"
           role="status"
@@ -114,12 +138,26 @@ export function ContactForm() {
           transition={{ duration: 0.9, ease: easeOutExpo }}
           className="flex min-h-[28rem] flex-col justify-center border-t border-line pt-10"
         >
-          <p className="font-serif text-title font-light">
-            Merci. <em className="text-accent">Votre message est bien arrivé.</em>
-          </p>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
-            Nous revenons vers vous sous 24 heures ouvrées pour échanger sur votre projet.
-          </p>
+          {status === "sent" ? (
+            <>
+              <p className="font-serif text-title font-light">
+                Merci. <em className="text-accent">Votre message est bien arrivé.</em>
+              </p>
+              <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
+                Nous revenons vers vous sous 24 heures ouvrées pour échanger sur votre projet.
+              </p>
+            </>
+          ) : (
+            <>
+              <p className="font-serif text-title font-light">
+                Merci. <em className="text-accent">Votre messagerie s&apos;ouvre.</em>
+              </p>
+              <p className="mt-6 max-w-md text-base leading-relaxed text-muted">
+                Votre message est prêt à partir vers {siteConfig.email} : il ne reste qu&apos;à
+                l&apos;envoyer. Nous revenons vers vous sous 24 heures ouvrées.
+              </p>
+            </>
+          )}
         </m.div>
       ) : (
         <m.form
