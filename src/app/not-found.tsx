@@ -1,4 +1,11 @@
+import type { Metadata } from "next";
 import { Button } from "@/components/ui/button";
+
+export const metadata: Metadata = {
+  title: "Page introuvable",
+  description: "Cette page n'existe pas ou a été déplacée. Retrouvez le studio Novéo sur l'accueil.",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (
