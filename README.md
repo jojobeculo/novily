@@ -55,8 +55,9 @@ src/
   app/                 routes, layout, SEO (metadata, sitemap, robots, manifest, OG image)
     mentions-legales/
   components/
-    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis)
-    sections/          une section de la page d'accueil par fichier
+    layout/            Navbar, Footer, MotionProvider, SmoothScrollProvider (Lenis), CustomCursor
+    sections/          une section de la page d'accueil par fichier ; services-showcase.tsx
+                       porte la scène 3D des services
     ui/                briques réutilisables : Button, SectionLink, TextReveal, Reveal,
                        ImageReveal, Magnetic, Accordion, SectionHeader, Logo
     seo/               données structurées JSON-LD
@@ -85,6 +86,20 @@ Tout lien vers une section de l'accueil s'écrit `/#<id>` et passe par `SectionL
 par `Button`). Sur l'accueil, il fait glisser la page jusqu'à la section, même si l'URL contient
 déjà ce `#`. Depuis une autre page, il ramène sur l'accueil. Les id de section sont listés dans
 `navigation` (`src/lib/site.ts`).
+
+## Services en 3D
+
+Sur ordinateur et tablette, les services défilent dans une scène 3D pilotée par le scroll
+(`services-showcase.tsx`, styles `services-*` dans `globals.css`). Chaque service ajouté dans
+`services` (`src/lib/content.ts`) prend sa place sans autre réglage : la hauteur de la section
+suit leur nombre. `showcase` choisit la réalisation qui illustre le service. Sur mobile, avec
+« réduire les animations » ou sans support de la 3D CSS, les services s'affichent en liste.
+
+## Curseur
+
+Le curseur personnalisé (`custom-cursor.tsx`, styles `custom-cursor-*`) n'apparaît qu'avec une
+vraie souris. Les écrans tactiles et « réduire les animations » gardent le curseur système, et
+les champs de texte gardent le curseur texte.
 
 ## Charte
 

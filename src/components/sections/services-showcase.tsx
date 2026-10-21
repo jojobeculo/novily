@@ -144,7 +144,7 @@ function ServiceContent({
       >
         <div className="flex items-center justify-between gap-6">
           <span className="text-sm text-faint tabular-nums">
-            {pad(index + 1)} <span className="text-faint/60">/ {pad(COUNT)}</span>
+            <span className="text-cream/80">{pad(index + 1)}</span> / {pad(COUNT)}
           </span>
           {service.upcoming ? (
             <span className="rounded-full border border-accent/50 px-3 py-1.5 text-eyebrow uppercase text-accent">

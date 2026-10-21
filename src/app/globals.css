@@ -176,3 +176,36 @@
     perspective: 1400px;
   }
 }
+
+/*
+ * Custom cursor (src/components/layout/custom-cursor.tsx). The class on <html>
+ * exists only while the custom cursor runs, so touch screens keep the native one.
+ */
+html.has-custom-cursor,
+html.has-custom-cursor * {
+  cursor: none;
+}
+
+html.has-custom-cursor :is(input, textarea, [contenteditable="true"]) {
+  cursor: text;
+}
+
+/* Frosted ring: a cream-to-periwinkle tint over a light blur. */
+.custom-cursor-ring {
+  border: 1px solid rgb(244 239 212 / 0.3);
+  background: linear-gradient(135deg, rgb(244 239 212 / 0.14), rgb(132 172 251 / 0.26));
+  backdrop-filter: blur(3px) saturate(140%);
+  -webkit-backdrop-filter: blur(3px) saturate(140%);
+  transition:
+    background 0.4s ease,
+    border-color 0.4s ease;
+}
+
+.custom-cursor-ring[data-active="true"] {
+  border-color: rgb(132 172 251 / 0.55);
+  background: linear-gradient(135deg, rgb(244 239 212 / 0.2), rgb(132 172 251 / 0.42));
+}
+
+.custom-cursor-dot {
+  background: linear-gradient(135deg, var(--color-cream), var(--color-accent));
+}

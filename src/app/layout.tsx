@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans, IBM_Plex_Serif } from "next/font/google";
+import { CustomCursor } from "@/components/layout/custom-cursor";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/layout/navbar";
@@ -93,6 +94,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <main id="contenu">{children}</main>
             <Footer year={year} />
           </SmoothScrollProvider>
+          <CustomCursor />
         </MotionProvider>
       </body>
     </html>
