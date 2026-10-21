@@ -83,6 +83,7 @@ src/
     image-loader.ts    choisit la bonne largeur d'image WebP
     motion.ts          courbes et réglages d'animation
 public/work/           visuels des réalisations
+brand/                 logos pour l'impression (PNG transparents, SVG)
 ```
 
 ## Modifier le contenu
@@ -147,18 +148,26 @@ les écrans tactiles ne sont pas concernés.
 
 ## Logo
 
-Le logo est le motif d'orbite du hero, épuré : trois anneaux concentriques, l'orbite inclinée et
-son satellite pervenche, posé là où l'orbite touche l'anneau extérieur. Fichiers vectoriels dans
-`public/` (viewBox 64 × 64, sans taille fixe) :
+Le logo reprend le motif du hero : cinq anneaux concentriques en traits fins, plus marqués vers
+l'extérieur, la croix de repère, l'orbite inclinée et son satellite pervenche.
 
-| Fichier | Usage |
+`brand/` réunit les fichiers pour l'impression (carte de visite, papeterie), sur fond transparent :
+
+| Fichier | Contenu |
 |---|---|
-| `logo-noveo.svg` | Couleurs de la marque (lignes crème), sur le noir du site |
-| `logo-noveo-fond-sombre.svg` | Lignes blanches, sur tout fond sombre ou photo foncée |
-| `logo-noveo-fond-clair.svg` | Lignes noires et pervenche plus soutenu, sur fond clair |
+| `noveo-symbole-*.png` | Le symbole seul, 3000 × 3000 px |
+| `noveo-horizontal-*.png` | Le symbole et « Novéo » côte à côte |
+| `noveo-vertical-*.png` | Le symbole, « Novéo » et « Studio digital » centrés |
+| `noveo-symbole-*.svg` | Le symbole en vectoriel, pour un imprimeur ou un logiciel de mise en page |
 
-Dans le site, `LogoMark` (`src/components/ui/logo-mark.tsx`) dessine la même géométrie en ligne,
-dans la couleur du texte : modifiez les fichiers et le composant ensemble.
+`-fond-sombre` : traits crème, pour un support noir ou foncé. `-fond-clair` : traits noirs, pour un
+support blanc ou clair. Imprimez le symbole à 16 mm de large au minimum : en dessous, les traits
+passent sous 0,09 mm et risquent de disparaître.
+
+Pour le site, `public/` garde les mêmes dessins en SVG (viewBox sans taille fixe) :
+`logo-noveo.svg` (crème), `logo-noveo-fond-sombre.svg` (blanc) et `logo-noveo-fond-clair.svg`
+(noir, utilisé par les données structurées). Dans l'en-tête, trop petit pour cinq anneaux,
+`LogoMark` (`src/components/ui/logo-mark.tsx`) en dessine une version allégée à trois anneaux.
 
 ## Charte
 
