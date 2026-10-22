@@ -29,11 +29,13 @@ Copiez `.env.example` vers `.env.local` et renseignez les variables :
 |---|---|
 | `NEXT_PUBLIC_SITE_URL` | URL publique, sous-chemin compris : liens canoniques, Open Graph, sitemap |
 | `NEXT_PUBLIC_BASE_PATH` | Sous-chemin du site (`/novily` sur GitHub Pages), vide avec un domaine personnalisé |
-| `NEXT_PUBLIC_CONTACT_ENDPOINT` | URL d'un service de formulaire qui accepte du JSON (ex. [Formspree](https://formspree.io)) |
+| `NEXT_PUBLIC_CONTACT_ENDPOINT` | Facultatif : autre formulaire [Formspree](https://formspree.io) que celui du site (`https://formspree.io/f/mpppakvq`) |
 | `NEXT_PUBLIC_GA_ID` | Identifiant de mesure Google Analytics 4 (`G-XXXXXXXXXX`), vide pour ne rien mesurer |
 
-Sans `NEXT_PUBLIC_CONTACT_ENDPOINT`, le formulaire ouvre la messagerie du visiteur avec le
-message pré-rempli.
+Le formulaire de contact envoie les demandes à Formspree, sans recharger la page. L'adresse qui
+reçoit les messages se règle dans le tableau de bord Formspree, pas dans le code. Chaque message
+a pour objet `[NOVYLI — NOUVEAU PROSPECT]` suivi du type de projet choisi, et la réponse part
+directement vers l'adresse du visiteur.
 
 Ces variables sont publiques par nature : elles finissent dans le HTML envoyé au visiteur. N'y
 mettez jamais une clé secrète (clé d'API privée, mot de passe). Le site n'en utilise aucune.
@@ -45,7 +47,7 @@ Le site est exporté en HTML statique (`output: "export"`) et publié par
 
 1. Dans **Settings → Pages**, choisissez **Source : GitHub Actions**.
 2. Optionnel : dans **Settings → Secrets and variables → Actions → Variables**, créez
-   `CONTACT_ENDPOINT` avec l'URL de votre service de formulaire, et `GA_ID` avec votre
+   `CONTACT_ENDPOINT` pour utiliser un autre formulaire Formspree, et `GA_ID` avec votre
    identifiant Google Analytics.
 3. Poussez sur `main`. Le site est publié sur `https://<compte>.github.io/novily/`.
 4. Toujours dans **Settings → Pages**, cochez **Enforce HTTPS** (coché d'office sur

@@ -5,8 +5,11 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://noveo.fr",
   /** Sub-path the site is served from. Next adds it to links, not to manifest icons. */
   basePath: process.env.NEXT_PUBLIC_BASE_PATH ?? "",
-  /** Form service URL (e.g. Formspree). Without it, the form opens the visitor's e-mail app. */
-  contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT ?? "",
+  /**
+   * Formspree form that receives the contact form. A form id is public by design (it sits in
+   * the HTML): the recipient address is set in the Formspree dashboard, never here.
+   */
+  contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "https://formspree.io/f/mpppakvq",
   /** Google Analytics 4 measurement id (G-…). Empty: no analytics, no consent banner. */
   analyticsId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   locale: "fr_FR",

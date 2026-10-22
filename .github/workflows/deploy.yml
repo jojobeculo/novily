@@ -44,7 +44,7 @@ jobs:
           # "/<repo>" on a project site, empty with a custom domain.
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
           NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
-          # Optional: set the CONTACT_ENDPOINT repository variable (e.g. a Formspree URL).
+          # Optional: the CONTACT_ENDPOINT repository variable replaces the site's Formspree form.
           NEXT_PUBLIC_CONTACT_ENDPOINT: ${{ vars.CONTACT_ENDPOINT }}
           # Optional: Google Analytics 4 measurement id (G-…). Without it, no analytics and no cookie banner.
           NEXT_PUBLIC_GA_ID: ${{ vars.GA_ID }}

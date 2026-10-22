@@ -69,7 +69,13 @@ const sections: LegalSection[] = [
           Vos données sont destinées à {siteConfig.legalName} seul. Elles ne sont ni vendues ni
           cédées. Nos prestataires techniques n&apos;y accèdent que pour fournir leur service :
           l&apos;hébergeur du site, [nom de l&apos;hébergeur], et le service d&apos;envoi du
-          formulaire, [nom du service, le cas échéant].
+          formulaire, Formspree (Formspree, Inc., États-Unis), qui nous transmet votre message
+          par e-mail et en garde une copie dans notre espace Formspree.
+        </p>
+        <p>
+          Vos données de contact peuvent ainsi être traitées hors de l&apos;Union européenne :
+          [garanties encadrant ce transfert, à vérifier dans la politique de confidentialité et
+          l&apos;accord de traitement des données de Formspree].
         </p>
         {analytics ? (
           <p>
