@@ -1,15 +1,11 @@
-import { ViewTransition, type ReactNode } from "react";
+import type { ReactNode } from "react";
 
 /**
- * Wraps a page so that moving to another page cross-fades the content (the
- * old page lifts away, the new one settles in) while the header stays still.
- * Styles: `page-enter` and `page-exit` in globals.css. Browsers without the
- * View Transitions API simply swap the pages.
+ * Wraps a page below the home page so it settles in (a short fade and rise, in
+ * CSS) when it opens. The View Transitions API was tried first: it holds the
+ * URL change for the length of the animation (about 0.7 s), which makes every
+ * link feel slow. A CSS entrance starts at once and delays nothing.
  */
 export function PageTransition({ children }: { children: ReactNode }) {
-  return (
-    <ViewTransition enter="page-enter" exit="page-exit" default="none">
-      {children}
-    </ViewTransition>
-  );
+  return <div className="animate-[page-in_0.6s_var(--ease-out-expo)_both] motion-reduce:animate-none">{children}</div>;
 }

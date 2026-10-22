@@ -102,8 +102,6 @@ export function Navbar() {
         transition={{ duration: 0.8, ease: easeOutExpo }}
         // Keyboard focus inside the header brings it back into view.
         onFocus={() => setHidden(false)}
-        // Named view transition: the header stays still while pages change beneath it.
-        style={{ viewTransitionName: "site-header" }}
         // CSS entrance: the header shows on first paint, without waiting for hydration.
         className={`fixed inset-x-0 top-0 z-50 animate-[header-in_0.9s_cubic-bezier(0.16,1,0.3,1)_backwards] transition-[background-color,backdrop-filter] duration-700 ease-out-expo ${
           scrolled && !open ? "bg-ink/60 backdrop-blur-xl" : "bg-transparent"

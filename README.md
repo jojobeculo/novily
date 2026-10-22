@@ -174,8 +174,9 @@ mouvement, ou sans JavaScript, la même flèche en CSS (fin de `globals.css`) pr
   le navigateur). Animations réduites : défilement natif, services en liste, bandeau immobile,
   animations CSS figées. `useMotionPreference()` donne l'état aux composants, `html[data-motion]`
   au CSS.
-- **Transitions de page** : `PageTransition` (API View Transitions) fait glisser le contenu d'une
-  page à l'autre ; l'en-tête reste fixe. Chaque nouvelle page l'enveloppe.
+- **Entrée des pages** : `PageTransition` fait apparaître chaque page secondaire par un court fondu
+  en CSS. L'API View Transitions avait été essayée : elle retient le changement d'adresse pendant
+  l'animation (environ 0,7 s) et donne l'impression que les liens sont lents.
 - **Clavier** : après un lien d'ancre, le focus passe sur la section ; le menu mobile garde le
   focus tant qu'il est ouvert et le rend au bouton à la fermeture ; l'en-tête réapparaît quand il
   reçoit le focus.
