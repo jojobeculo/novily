@@ -99,7 +99,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-svh bg-ink text-cream">
         <a
           href="#contenu"
-          className="fixed top-4 left-4 z-[60] -translate-y-24 rounded-full bg-cream px-5 py-3 text-sm text-ink transition-transform focus:translate-y-0"
+          className="fixed top-4 left-4 z-[60] -translate-y-40 rounded-full bg-cream px-5 py-3 text-sm text-ink transition-transform focus:translate-y-0"
         >
           Aller au contenu
         </a>

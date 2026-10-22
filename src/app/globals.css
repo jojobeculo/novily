@@ -175,9 +175,13 @@
 }
 
 /* Page entrance (src/components/layout/page-transition.tsx): a short fade and rise. */
+/*
+ * Starts half visible, not at 0: Chrome leaves content fading in from opacity 0
+ * out of First and Largest Contentful Paint, which then read as missing.
+ */
 @keyframes page-in {
   from {
-    opacity: 0;
+    opacity: 0.4;
     transform: translateY(1.5rem);
   }
 }
@@ -209,10 +213,17 @@
   perspective: 1800px;
   perspective-origin: 50% -20%;
   transform-style: preserve-3d;
+  /*
+   * The front panel lies in the track's own plane, and Chrome hit-tests coplanar
+   * layers in no fixed order: clicks on parts of its buttons reached the track.
+   * The track takes no clicks, so they always land on a panel.
+   */
+  pointer-events: none;
 }
 
 /* Panels tilt back around their bottom edge, like a page laid down. */
 .services-panel {
+  pointer-events: auto;
   transform-origin: 50% 100%;
   backface-visibility: hidden;
   will-change: transform, opacity;

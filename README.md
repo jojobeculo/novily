@@ -63,6 +63,25 @@ Sur un hébergement Apache (mutualisé), `public/.htaccess` est copié à la rac
 le HTTPS (redirection 301 et HSTS), sert la page 404 personnalisée, compresse les textes et règle
 le cache. Les autres hébergeurs l'ignorent.
 
+## Déploiement sur OVHcloud (hébergement mutualisé)
+
+1. Construisez le site avec l'adresse de votre domaine, sans sous-chemin :
+
+   ```bash
+   rm -rf .next out
+   NEXT_PUBLIC_SITE_URL=https://votre-domaine.fr npm run build
+   ```
+
+2. Ouvrez votre espace FTP (identifiants dans l'espace client OVHcloud, **Web Cloud →
+   Hébergements → votre hébergement → FTP - SSH**), par exemple avec FileZilla, port 21 (FTP)
+   ou 22 (SFTP selon l'offre).
+3. Dans le dossier `www/`, déposez **le contenu** du dossier `out/` (pas le dossier lui-même),
+   y compris le fichier caché `.htaccess` : activez l'affichage des fichiers cachés dans votre
+   client FTP. Remplacez les fichiers existants ; supprimez ceux d'une ancienne version qui
+   n'existent plus dans `out/`.
+4. Dans l'espace client, vérifiez que le certificat SSL est actif (**Hébergements → Informations
+   générales → Certificat SSL**) : le `.htaccess` redirige tout le trafic vers HTTPS.
+
 ## Structure
 
 ```

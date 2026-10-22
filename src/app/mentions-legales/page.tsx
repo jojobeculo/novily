@@ -22,7 +22,7 @@ export default function LegalNoticePage() {
         },
         {
           title: "Hébergement",
-          body: "Le site est hébergé par [nom de l'hébergeur], [adresse de l'hébergeur].",
+          body: "Le site est hébergé par OVH SAS, 2 rue Kellermann, 59100 Roubaix, France.",
         },
         {
           title: "Propriété intellectuelle",

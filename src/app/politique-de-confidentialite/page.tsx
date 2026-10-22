@@ -68,7 +68,7 @@ const sections: LegalSection[] = [
         <p>
           Vos données sont destinées à {siteConfig.legalName} seul. Elles ne sont ni vendues ni
           cédées. Nos prestataires techniques n&apos;y accèdent que pour fournir leur service :
-          l&apos;hébergeur du site, [nom de l&apos;hébergeur], et le service d&apos;envoi du
+          l&apos;hébergeur du site, OVH SAS (France), et le service d&apos;envoi du
           formulaire, Formspree (Formspree, Inc., États-Unis), qui nous transmet votre message
           par e-mail et en garde une copie dans notre espace Formspree.
         </p>
