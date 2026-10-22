@@ -137,13 +137,18 @@ function ServiceContent({
         >
           {service.hook}
         </p>
-        <p className={`max-w-md text-body text-muted ${stage ? "mt-[1.8vh]" : "mt-4"}`}>
+        <p
+          className={`max-w-md text-body text-muted ${
+            // Short screens keep the stage: the long description gives way first.
+            stage ? "mt-[1.8vh] [@media(max-height:700px)]:hidden" : "mt-4"
+          }`}
+        >
           {service.description}
         </p>
         {/* In the stage, chips only where the text column has room for them. */}
         <ul
           className={`flex-wrap gap-2 ${
-            stage ? "mt-[3vh] hidden xl:flex [@media(max-height:760px)]:hidden" : "mt-7 flex"
+            stage ? "mt-[3vh] hidden xl:flex [@media(max-height:860px)]:hidden" : "mt-7 flex"
           }`}
           aria-label="Expertises"
         >
