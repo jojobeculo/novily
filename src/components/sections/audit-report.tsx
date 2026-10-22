@@ -39,9 +39,9 @@ const actions = [
 ];
 
 const levelClass: Record<string, string> = {
-  Critique: "border-accent text-accent",
-  Majeur: "border-line-strong text-cream",
-  Mineur: "border-line text-muted",
+  Critique: "text-accent",
+  Majeur: "text-cream",
+  Mineur: "text-muted",
 };
 
 /**
@@ -92,9 +92,8 @@ export function AuditReport() {
                 key={a.action}
                 className="grid gap-3 border-t border-line py-5 md:grid-cols-[7rem_1fr_14rem] md:items-baseline md:gap-6"
               >
-                <span
-                  className={`justify-self-start rounded-full border px-3 py-1 text-xs ${levelClass[a.level]}`}
-                >
+                <span className={`inline-flex items-center gap-2 justify-self-start text-xs ${levelClass[a.level]}`}>
+                  <span aria-hidden className="size-1.5 rounded-full bg-current" />
                   {a.level}
                 </span>
                 <span className="text-body text-cream/90">{a.action}</span>

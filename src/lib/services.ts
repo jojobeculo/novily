@@ -71,7 +71,7 @@ export const services: readonly Service[] = [
         "Un site réussi tient à l'équilibre entre une image juste, un parcours clair et une technique solide. Nous menons ces trois chantiers ensemble, de la direction artistique à la mise en ligne. Le résultat : un site qui vous ressemble, se charge vite, se trouve facilement sur les moteurs de recherche et reste simple à faire évoluer.",
       examplesTitle: "Les formats que nous concevons",
       examplesIntro:
-        "Quatre formats, une même exigence : une marque lisible, un parcours clair et une technique solide.",
+        "Douze sites imaginés pour des marques exigeantes, puis les quatre formats que nous concevons : une même exigence de lisibilité, de parcours et de technique.",
       examples: [
         {
           tag: "Site vitrine",

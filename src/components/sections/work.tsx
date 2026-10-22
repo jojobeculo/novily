@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ImageReveal } from "@/components/ui/image-reveal";
 import { Reveal } from "@/components/ui/reveal";
 import { SectionHeader } from "@/components/ui/section-header";
+import { SectionLink } from "@/components/ui/section-link";
 import {
   projectCategories,
   projects,
@@ -13,12 +14,14 @@ import {
   type ProjectCategory,
 } from "@/lib/content";
 import { easeOutExpo } from "@/lib/motion";
+import { serviceHref, services } from "@/lib/services";
 
 type Filter = ProjectCategory | "all";
 
 export function ProjectCard({ project }: { project: Project }) {
   return (
-    <article className="group">
+    // Not a link: no hover zoom or highlight, so the mockup's drawn buttons never look live.
+    <article>
       <ImageReveal
         src={project.image}
         alt={project.imageAlt}
@@ -31,7 +34,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <h3 className="font-serif text-[clamp(1.5rem,1.2rem+1vw,2.25rem)] leading-tight font-light">
             {project.name}
           </h3>
-          <p className="mt-3 max-w-sm text-[0.9375rem] leading-relaxed text-muted transition-colors duration-700 group-hover:text-cream/85">
+          <p className="mt-3 max-w-sm text-[0.9375rem] leading-relaxed text-muted">
             {project.summary}
           </p>
         </div>
@@ -46,7 +49,8 @@ export function ProjectCard({ project }: { project: Project }) {
 
 export function Work() {
   const [filter, setFilter] = useState<Filter>("all");
-  const visible = filter === "all" ? projects : projects.filter((p) => p.category === filter);
+  // "Sélection" keeps the home page short; each category shows all of its projects.
+  const visible = projects.filter((p) => (filter === "all" ? p.featured : p.category === filter));
 
   return (
     <section id="realisations" aria-labelledby="work-title" className="section-space">
@@ -106,9 +110,17 @@ export function Work() {
           <p className="max-w-md text-body text-muted">
             Votre projet pourrait être le prochain. Parlons de vos objectifs.
           </p>
-          <Button href="/#contact" variant="light" arrow className="self-start sm:self-auto">
-            Parlons de votre projet
-          </Button>
+          <div className="flex flex-wrap items-center gap-x-8 gap-y-5 self-start sm:self-auto">
+            <SectionLink
+              href={`${serviceHref(services.find((s) => s.art === "web")!)}#exemples`}
+              className="inline-block py-2 text-sm text-muted underline decoration-line-strong underline-offset-4 transition-colors hover:text-cream hover:decoration-accent"
+            >
+              Toutes nos réalisations ({projects.length})
+            </SectionLink>
+            <Button href="/#contact" variant="light" arrow>
+              Parlons de votre projet
+            </Button>
+          </div>
         </Reveal>
       </div>
     </section>

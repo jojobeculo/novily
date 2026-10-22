@@ -109,7 +109,8 @@ function ServiceContent({
             <span className="text-cream/80">{pad(index + 1)}</span> / {pad(COUNT)}
           </span>
           {service.upcoming ? (
-            <span className="rounded-full border border-accent/50 px-3 py-1.5 text-eyebrow uppercase text-accent">
+            <span className="inline-flex items-center gap-2 text-eyebrow uppercase text-accent">
+              <span aria-hidden className="size-1.5 rounded-full bg-accent" />
               Prochainement
             </span>
           ) : null}
@@ -145,15 +146,16 @@ function ServiceContent({
         >
           {service.description}
         </p>
-        {/* In the stage, chips only where the text column has room for them. */}
+        {/* Plain list, not pills: only buttons look like buttons. In the stage, only where the text column has room. */}
         <ul
-          className={`flex-wrap gap-2 ${
+          className={`flex-wrap gap-x-5 gap-y-2 text-xs text-muted ${
             stage ? "mt-[3vh] hidden xl:flex [@media(max-height:860px)]:hidden" : "mt-7 flex"
           }`}
           aria-label="Expertises"
         >
           {service.deliverables.map((d) => (
-            <li key={d} className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted">
+<li key={d} className="flex items-center gap-2">
+              <span aria-hidden className="size-1 rounded-full bg-accent/70" />
               {d}
             </li>
           ))}

@@ -11,7 +11,7 @@ export function Services() {
           id="services-title"
           index="01"
           label="Services"
-          title={["Quatre expertises, ", { accent: "une exigence." }]}
+          title={["Cinq expertises, ", { accent: "une exigence." }]}
           intro="Du site web à l'intelligence artificielle, nous accompagnons votre entreprise à chaque étape de sa transformation numérique. Et bientôt, jusqu'au logiciel sur mesure."
         />
       </div>

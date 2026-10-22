@@ -53,7 +53,7 @@ export const commitments = [
 export type ProjectCategory = "vitrine" | "e-commerce" | "conceptuel";
 
 export const projectCategories: ReadonlyArray<{ id: ProjectCategory | "all"; label: string }> = [
-  { id: "all", label: "Tous" },
+  { id: "all", label: "Sélection" },
   { id: "vitrine", label: "Sites vitrines" },
   { id: "e-commerce", label: "E-commerce" },
   { id: "conceptuel", label: "Conceptuels" },
@@ -68,11 +68,14 @@ export type Project = {
   year: number;
   image: string;
   imageAlt: string;
+  /** Shown under "Sélection" on the home page. Every project appears on the web design service page. */
+  featured?: boolean;
 };
 
 export const projects: readonly Project[] = [
   {
     slug: "maison-aubrac",
+    featured: true,
     name: "Maison Aubrac",
     summary: "Restaurant gastronomique — réservation en ligne et identité éditoriale.",
     category: "vitrine",
@@ -83,6 +86,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "seve",
+    featured: true,
     name: "Sève",
     summary: "Cosmétiques naturels — boutique en ligne et rituels de soin.",
     category: "e-commerce",
@@ -93,6 +97,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "orbe-festival",
+    featured: true,
     name: "Orbe Festival",
     summary: "Festival de musiques électroniques — expérience immersive et billetterie.",
     category: "conceptuel",
@@ -103,6 +108,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "atelier-linea",
+    featured: true,
     name: "Atelier Linéa",
     summary: "Cabinet d'architecture — portfolio de projets et prise de contact.",
     category: "vitrine",
@@ -113,6 +119,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "halden-audio",
+    featured: true,
     name: "Halden Audio",
     summary: "Casques audio premium — fiche produit immersive et tunnel d'achat.",
     category: "e-commerce",
@@ -123,6 +130,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "galerie-vantal",
+    featured: true,
     name: "Galerie Vantal",
     summary: "Galerie d'art contemporain — site d'exposition et catalogue en ligne.",
     category: "conceptuel",
@@ -130,6 +138,66 @@ export const projects: readonly Project[] = [
     year: 2024,
     image: "/work/vantal.webp",
     imageAlt: "Site de la Galerie Vantal : peinture abstraite colorée et titre « Couleur brute ».",
+  },
+  {
+    slug: "fournil-montjuzet",
+    name: "Fournil Montjuzet",
+    summary: "Boulangerie artisanale — horaires, pains du jour et commande à emporter.",
+    category: "vitrine",
+    categoryLabel: "Site vitrine",
+    year: 2026,
+    image: "/work/fournil.webp",
+    imageAlt: "Site du Fournil Montjuzet : pains au levain sur fond crème et titre « Le pain prend son temps ».",
+  },
+  {
+    slug: "atelier-gres",
+    name: "Atelier Grès",
+    summary: "Céramiques tournées à la main — boutique en ligne par collection.",
+    category: "e-commerce",
+    categoryLabel: "E-commerce",
+    year: 2026,
+    image: "/work/gres.webp",
+    imageAlt: "Boutique Atelier Grès : assiettes émaillées bleu pâle, titre « Tourné, émaillé, cuit à la main » et liste de prix.",
+  },
+  {
+    slug: "nebula",
+    name: "Nébula",
+    summary: "Observatoire et planétarium — récit interactif et réservation des séances.",
+    category: "conceptuel",
+    categoryLabel: "Site conceptuel",
+    year: 2026,
+    image: "/work/nebula.webp",
+    imageAlt: "Site conceptuel Nébula : nébuleuse dans un cercle sur fond noir et titre monumental.",
+  },
+  {
+    slug: "compagnie-des-cimes",
+    name: "Compagnie des Cimes",
+    summary: "Bureau des guides de haute montagne — courses, stages et réservation.",
+    category: "vitrine",
+    categoryLabel: "Site vitrine",
+    year: 2025,
+    image: "/work/cimes.webp",
+    imageAlt: "Site de la Compagnie des Cimes : sommets au-dessus d'une mer de nuages et titre « Au-dessus des nuages ».",
+  },
+  {
+    slug: "pantaz-cycles",
+    name: "Pantaz Cycles",
+    summary: "Vélos de route sur mesure — configurateur de taille et commande en ligne.",
+    category: "e-commerce",
+    categoryLabel: "E-commerce",
+    year: 2025,
+    image: "/work/pantaz.webp",
+    imageAlt: "Boutique Pantaz Cycles : vélo de route noir, choix de la taille du cadre et prix.",
+  },
+  {
+    slug: "ondes-courtes",
+    name: "Ondes Courtes",
+    summary: "Podcast de société — lecteur intégré et archive des épisodes.",
+    category: "conceptuel",
+    categoryLabel: "Site conceptuel",
+    year: 2025,
+    image: "/work/ondes.webp",
+    imageAlt: "Site du podcast Ondes Courtes : micro en noir et blanc, titre d'épisode et forme d'onde orange.",
   },
 ];
 

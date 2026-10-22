@@ -15,7 +15,6 @@ type ImageRevealProps = {
 
 /**
  * An image uncovered by a rising curtain, with a light scroll parallax.
- * The image itself zooms in slightly when its parent `group` is hovered.
  */
 export function ImageReveal({ src, alt, sizes, className, priority = false }: ImageRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -48,7 +47,7 @@ export function ImageReveal({ src, alt, sizes, className, priority = false }: Im
             priority={priority}
             onLoad={() => setLoaded(true)}
             // Fade in once decoded, so a slow image never pops in mid-reveal.
-            className={`object-cover transition-[scale,opacity] duration-[1600ms] ease-out-expo group-hover:scale-[1.045] ${
+            className={`object-cover transition-opacity duration-[1600ms] ease-out-expo ${
               loaded ? "opacity-100" : "opacity-0"
             }`}
           />

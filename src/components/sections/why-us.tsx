@@ -49,11 +49,11 @@ export function WhyUs() {
             <li key={item.title}>
               <RevealLine />
               <Reveal y={20} delay={0.05}>
-                <div className="group grid grid-cols-[3rem_1fr] gap-x-4 py-10 md:grid-cols-[4rem_1fr] md:py-12">
-                  <span className="pt-2 text-sm text-faint tabular-nums transition-colors duration-500 group-hover:text-accent">
+                <div className="grid grid-cols-[3rem_1fr] gap-x-4 py-10 md:grid-cols-[4rem_1fr] md:py-12">
+                  <span className="pt-2 text-sm text-faint tabular-nums">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <div className="transition-transform duration-1000 ease-out-expo group-hover:translate-x-2">
+                  <div>
                     <h3 className="font-serif text-[clamp(1.5rem,1.2rem+1vw,2.125rem)] leading-tight font-light">
                       {item.title}
                     </h3>

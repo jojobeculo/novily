@@ -86,7 +86,8 @@ export function ServiceDetail({ service }: { service: Service }) {
                   Service <span className="text-cream">{pad(index + 1)}</span> / {pad(services.length)}
                 </span>
                 {service.upcoming ? (
-                  <span className="rounded-full border border-accent/50 px-3 py-1.5 text-accent">
+                  <span className="inline-flex items-center gap-2 text-accent">
+                    <span aria-hidden className="size-1.5 rounded-full bg-accent" />
                     Prochainement
                   </span>
                 ) : null}
@@ -120,9 +121,10 @@ export function ServiceDetail({ service }: { service: Service }) {
             </Reveal>
           </div>
 
-          <ul aria-label="Expertises" className="mt-14 flex flex-wrap gap-2 lg:mt-20">
+          <ul aria-label="Expertises" className="mt-14 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted lg:mt-20">
             {service.deliverables.map((d) => (
-              <li key={d} className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted">
+              <li key={d} className="flex items-center gap-2.5">
+                <span aria-hidden className="size-1 rounded-full bg-accent/70" />
                 {d}
               </li>
             ))}
@@ -157,11 +159,10 @@ export function ServiceDetail({ service }: { service: Service }) {
             {page.examples.map((example, i) => (
               <li key={example.title}>
                 <Reveal delay={(i % 2) * 0.1} className="h-full">
-                  <article className="group flex h-full flex-col rounded-card border border-line bg-surface p-7 transition-colors duration-700 hover:border-line-strong md:p-9">
+                  {/* Not a link: no hover state, so the card never looks clickable. */}
+                  <article className="flex h-full flex-col rounded-card border border-line bg-surface p-7 md:p-9">
                     <div className="flex items-center justify-between gap-6">
-                      <span className="rounded-full border border-line px-3 py-1 text-xs text-muted">
-                        {example.tag}
-                      </span>
+                      <span className="text-eyebrow uppercase text-faint">{example.tag}</span>
                       <span className="text-sm text-faint tabular-nums">{pad(i + 1)}</span>
                     </div>
                     <h3 className="mt-10 font-serif text-[clamp(1.375rem,1.15rem+0.8vw,1.875rem)] leading-tight font-light text-balance">
