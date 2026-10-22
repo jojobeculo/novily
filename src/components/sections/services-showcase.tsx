@@ -133,9 +133,10 @@ function ServiceContent({
         <p className={`max-w-md text-body text-muted ${stage ? "mt-[1.8vh]" : "mt-4"}`}>
           {service.description}
         </p>
+        {/* In the stage, chips only where the text column has room for them. */}
         <ul
-          className={`flex flex-wrap gap-2 ${
-            stage ? "mt-[3vh] [@media(max-height:760px)]:hidden" : "mt-7"
+          className={`flex-wrap gap-2 ${
+            stage ? "mt-[3vh] hidden xl:flex [@media(max-height:760px)]:hidden" : "mt-7 flex"
           }`}
           aria-label="Expertises"
         >

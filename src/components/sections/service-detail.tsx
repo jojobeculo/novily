@@ -203,11 +203,14 @@ export function ServiceDetail({ service }: { service: Service }) {
           <SectionTitle id="cadre-title" index="03" label="Cadre et outils" title={page.frameworkTitle} intro={page.frameworkIntro} />
           <dl className="mt-16 border-t border-line md:mt-24">
             {page.framework.map((item) => (
-              <Reveal key={item.name} y={16}>
-                <div className="grid gap-2 border-b border-line py-7 md:grid-cols-12 md:gap-6">
-                  <dt className="font-serif text-xl font-light md:col-span-4">{item.name}</dt>
-                  <dd className="max-w-2xl text-body text-muted md:col-span-8">{item.text}</dd>
-                </div>
+              // The animated wrapper is itself the dt/dd group, as a <dl> requires.
+              <Reveal
+                key={item.name}
+                y={16}
+                className="grid gap-2 border-b border-line py-7 md:grid-cols-12 md:gap-6"
+              >
+                <dt className="font-serif text-xl font-light md:col-span-4">{item.name}</dt>
+                <dd className="max-w-2xl text-body text-muted md:col-span-8">{item.text}</dd>
               </Reveal>
             ))}
           </dl>
