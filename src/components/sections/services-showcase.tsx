@@ -8,7 +8,9 @@ import {
   type MotionValue,
 } from "framer-motion";
 import {
+  useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useSyncExternalStore,
@@ -60,6 +62,9 @@ function settle(raw: number) {
   return index + x * x * (3 - 2 * x);
 }
 
+/** Smallest illustration height, in pixels, worth keeping in a stacked stage panel. */
+const MIN_STACKED_ART = 160;
+
 type Depth = { rotate: number; depth: number; shrink: number; lift: number };
 
 // Desktop gets the full depth; tablets a softer version.
@@ -82,6 +87,8 @@ function ServiceContent({
   const stage = layout === "stage";
   return (
     <div
+      // Measured by ServicesStage: content taller than its panel sends the section to the list.
+      data-panel-content={stage ? "" : undefined}
       className={
         stage
           ? "grid h-full grid-rows-[minmax(0,1fr)_auto] gap-8 p-6 lg:grid-cols-12 lg:grid-rows-1 lg:gap-10 lg:p-7"
@@ -151,7 +158,8 @@ function ServiceContent({
           href={serviceHref(service)}
           variant="outline"
           arrow
-          className={`self-start ${stage ? "mt-[3.4vh]" : "mt-8"}`}
+          // shrink-0: never squeezed by a short panel, so an overflow shows up in the measure.
+          className={`shrink-0 self-start ${stage ? "mt-[3.4vh]" : "mt-8"}`}
         >
           {service.cta}
           <span className="sr-only"> : {service.title}</span>
@@ -197,7 +205,7 @@ function StagePanel({
     <m.article
       aria-labelledby={`service-${service.id}`}
       style={{ y, rotateX, z, scale, opacity }}
-      // Keyboard users tabbing into a hidden panel bring it to the front.
+      // Keyboard users tabbing into a hidden panel bring it to the front, at once.
       onFocus={() => onFocusPanel(index)}
       className={`services-panel ${panelClass} absolute inset-0`}
     >
@@ -242,7 +250,8 @@ function StageProgress({
                 type="button"
                 onClick={() => onSelect(i)}
                 aria-current={active === i ? "step" : undefined}
-                aria-label={`Afficher : ${service.title}`}
+                // The visible label (shortTitle) starts the accessible name (WCAG 2.5.3).
+                aria-label={`Afficher : ${service.shortTitle}`}
                 className="group block w-full pb-1 text-left transition-opacity active:opacity-60"
               >
                 <ProgressSegment position={position} index={i} />
@@ -272,7 +281,7 @@ function StageProgress({
   );
 }
 
-function ServicesStage() {
+function ServicesStage({ onTooTight }: { onTooTight: () => void }) {
   const runwayRef = useRef<HTMLDivElement>(null);
   const depthRef = useRef<Depth>(DEPTH_DESKTOP);
   const { scrollTo } = useSmoothScroll();
@@ -288,13 +297,38 @@ function ServicesStage() {
     return () => window.removeEventListener("resize", update);
   }, []);
 
+  // Short screens, large default fonts: if any panel cannot hold its content,
+  // the list takes over. Measured before paint, again once the fonts are in.
+  useLayoutEffect(() => {
+    const runway = runwayRef.current;
+    if (!runway) return;
+    const check = () => {
+      const tooTight = [...runway.querySelectorAll<HTMLElement>("[data-panel-content]")].some(
+        (content) => {
+          const art = content.firstElementChild as HTMLElement;
+          const text = content.lastElementChild as HTMLElement;
+          const overflows = [content, text].some((box) => box.scrollHeight > box.clientHeight + 1);
+          // Stacked panels (below lg): an illustration squeezed into a strip reads worse than the list.
+          const stacked = getComputedStyle(content).gridTemplateColumns.split(" ").length === 1;
+          return overflows || (stacked && art.clientHeight < MIN_STACKED_ART);
+        },
+      );
+      if (tooTight) onTooTight();
+    };
+    check();
+    document.fonts?.ready.then(check);
+    const observer = new ResizeObserver(check);
+    observer.observe(runway);
+    return () => observer.disconnect();
+  }, [onTooTight]);
+
   /** Scrolls to the point where service `index` rests in front. */
-  function showService(index: number) {
+  function showService(index: number, immediate = false) {
     const runway = runwayRef.current;
     if (!runway) return;
     const top = runway.getBoundingClientRect().top + window.scrollY;
     const travel = runway.offsetHeight - window.innerHeight;
-    scrollTo(top + (index / STEPS) * travel);
+    scrollTo(top + (index / STEPS) * travel, { immediate });
   }
 
   return (
@@ -313,7 +347,7 @@ function ServicesStage() {
                 index={i}
                 position={position}
                 depth={depthRef}
-                onFocusPanel={showService}
+                onFocusPanel={(index) => showService(index, true)}
               />
             ))}
           </div>
@@ -334,7 +368,21 @@ function ServicesStage() {
 export function ServicesShowcase() {
   const fits = useSyncExternalStore(subscribe, getImmersive, getServerImmersive);
   const { reduced } = useMotionPreference();
-  const immersive = fits && !reduced;
+  // Set when a panel cannot hold its content; a resize gives the stage another try.
+  const [tooTight, setTooTight] = useState(false);
+  const markTooTight = useCallback(() => setTooTight(true), []);
+  useEffect(() => {
+    let last = { w: window.innerWidth, h: window.innerHeight };
+    const retry = () => {
+      const now = { w: window.innerWidth, h: window.innerHeight };
+      // A toolbar sliding away changes the height a little: not worth switching layouts mid-scroll.
+      if (now.w !== last.w || Math.abs(now.h - last.h) > 150) setTooTight(false);
+      last = now;
+    };
+    window.addEventListener("resize", retry);
+    return () => window.removeEventListener("resize", retry);
+  }, []);
+  const immersive = fits && !reduced && !tooTight;
 
   // The stage is taller than the list it replaces: keep a deep link (#faq…) on its target.
   useEffect(() => {
@@ -342,7 +390,7 @@ export function ServicesShowcase() {
     document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }, [immersive]);
 
-  if (immersive) return <ServicesStage />;
+  if (immersive) return <ServicesStage onTooTight={markTooTight} />;
 
   return (
     <ul className="container-page mt-16 flex flex-col gap-5 md:mt-24">

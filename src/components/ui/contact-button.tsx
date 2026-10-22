@@ -19,7 +19,10 @@ export function ContactButton({ projectType, children, variant, className }: Con
       variant={variant}
       arrow
       className={className}
-      onClick={() => requestProjectType(projectType)}
+      onClick={(e) => {
+        if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+        requestProjectType(projectType);
+      }}
     >
       {children}
     </Button>

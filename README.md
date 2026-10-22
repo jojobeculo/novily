@@ -146,8 +146,9 @@ numérique et conformité, transition IA, marketing digital et motion design, lo
 
 Sur ordinateur et tablette, ils défilent dans une scène 3D pilotée par le scroll
 (`services-showcase.tsx`, styles `services-*` dans `globals.css`) ; la hauteur de la section suit
-leur nombre. Sur mobile, avec les animations réduites ou sans support de la 3D CSS, ils
-s'affichent en liste. Chaque panneau a un bouton (`cta`) vers la page du service,
+leur nombre. Ils s'affichent en liste sur mobile, avec les animations réduites, sans support de la
+3D CSS, et dès qu'un panneau ne tient pas dans l'écran (écran court, grand texte) : la scène se
+mesure avant l'affichage et cède la place à la liste. Chaque panneau a un bouton (`cta`) vers la page du service,
 `/services/<id>/` : exemples, expertises, cadre et outils, méthode, questions, puis « Parlons de
 votre projet », qui ouvre le formulaire avec le type de projet (`projectType`) déjà choisi.
 

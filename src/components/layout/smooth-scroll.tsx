@@ -6,8 +6,8 @@ import { createContext, useContext, useEffect, useRef, useState, type ReactNode 
 import { useMotionPreference } from "./motion-provider";
 
 type SmoothScroll = {
-  /** Glides to an element or a y position. */
-  scrollTo: (target: HTMLElement | number) => void;
+  /** Glides to an element or a y position; `immediate` jumps there instead. */
+  scrollTo: (target: HTMLElement | number, options?: { immediate?: boolean }) => void;
   /** Freezes the page scroll, e.g. while the mobile menu is open. */
   setLocked: (locked: boolean) => void;
   /** True while a scrollTo glide runs, so the navbar can stay in view. */
@@ -39,11 +39,12 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   }, [reduce]);
 
   const [api] = useState<SmoothScroll>(() => ({
-    scrollTo(target) {
+    scrollTo(target, options) {
       const lenis = lenisRef.current;
       const top = typeof target === "number" ? target : target.getBoundingClientRect().top + window.scrollY;
-      if (!lenis) {
-        window.scrollTo({ top, behavior: "auto" });
+      if (!lenis || options?.immediate) {
+        if (lenis) lenis.scrollTo(top, { immediate: true });
+        else window.scrollTo({ top, behavior: "auto" });
         return;
       }
       // A link in the mobile menu scrolls as the menu closes: release the lock first,

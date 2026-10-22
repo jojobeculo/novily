@@ -84,7 +84,7 @@ export const services: readonly Service[] = [
           text: "Fiches produits soignées, tunnel de commande court, paiement sécurisé. Shopify ou architecture headless selon votre catalogue, vos volumes et vos outils de gestion.",
         },
         {
-          tag: "Site immersif",
+          tag: "Site conceptuel",
           title: "Une expérience qui marque les esprits",
           text: "Scroll narratif, animations et motion design pour un lancement, une marque premium ou un projet culturel. Sans sacrifier la vitesse de chargement ni l'accessibilité.",
         },

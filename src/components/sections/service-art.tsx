@@ -5,10 +5,10 @@ import { MotionArt } from "@/components/ui/art/motion-art";
 import { projects } from "@/lib/content";
 import type { Service } from "@/lib/services";
 
-/** "stage": fills the 3D panel's height. "list" and "page": 4:3 box. */
+/** "stage": fills the 3D panel's grid row, however short. "list" and "page": 4:3 box. */
 type Layout = "stage" | "list" | "page";
 
-const box = (layout: Layout) => (layout === "stage" ? "h-full min-h-56" : "aspect-[4/3]");
+const box = (layout: Layout) => (layout === "stage" ? "h-full min-h-0" : "aspect-[4/3]");
 
 /** Hairline wireframe of a business application: dashboard, menu and chart. */
 function SoftwareArt({ className }: { className?: string }) {
@@ -62,7 +62,7 @@ export function ServiceArt({ service, layout }: { service: Service; layout: Layo
   const Art = drawn[service.art];
   return (
     <div
-      className={`flex items-center justify-center rounded-[10px] border border-line bg-ink ${box(layout)}`}
+      className={`flex items-center justify-center overflow-hidden rounded-[10px] border border-line bg-ink ${box(layout)}`}
     >
       <Art className="max-h-[86%] w-[82%] max-w-xl" />
     </div>

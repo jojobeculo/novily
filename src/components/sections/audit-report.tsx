@@ -5,15 +5,16 @@ const areas = [
   { area: "Accessibilité", reference: "RGAA 4.1.2", result: "58 %", note: "des critères applicables respectés" },
   { area: "Cookies", reference: "Recommandations CNIL", result: "Non conforme", note: "traceurs déposés avant le choix" },
   { area: "Données personnelles", reference: "RGPD", result: "4 écarts", note: "information et durées de conservation" },
-  { area: "Mentions légales et CGU", reference: "LCEN", result: "2 manques", note: "hébergeur et numéro SIRET absents" },
+  { area: "Mentions légales", reference: "LCEN", result: "2 manques", note: "hébergeur et numéro d'immatriculation absents" },
 ];
 
 /** Prioritised corrections, each tied to the criterion it answers. */
 const actions = [
   {
     level: "Critique",
-    action: "Ajouter un bouton « Tout refuser » aussi visible que « Tout accepter » sur le bandeau cookies.",
-    reference: "CNIL, lignes directrices cookies",
+    action:
+      "Bloquer les traceurs de mesure et publicitaires jusqu'au choix du visiteur, et rendre « Tout refuser » aussi visible que « Tout accepter ».",
+    reference: "Loi Informatique et Libertés, art. 82 · CNIL",
   },
   {
     level: "Critique",
@@ -51,13 +52,19 @@ const levelClass: Record<string, string> = {
 export function AuditReport() {
   return (
     <Reveal>
-      <figure className="overflow-hidden rounded-card border border-line-strong bg-surface">
+      <figure
+        aria-labelledby="audit-report-title"
+        className="overflow-hidden rounded-card border border-line-strong bg-surface"
+      >
         <div className="flex flex-col gap-3 border-b border-line px-6 py-6 sm:flex-row sm:items-end sm:justify-between md:px-9">
           <div>
             <p className="text-eyebrow uppercase text-faint">Exemple de rapport d&apos;audit</p>
-            <p className="mt-3 font-serif text-[clamp(1.375rem,1.15rem+0.8vw,1.875rem)] leading-tight font-light">
+            <h3
+              id="audit-report-title"
+              className="mt-3 font-serif text-[clamp(1.375rem,1.15rem+0.8vw,1.875rem)] leading-tight font-light"
+            >
               Conformité du site <em className="text-accent">entreprise-exemple.fr</em>
-            </p>
+            </h3>
           </div>
           <p className="text-xs text-faint">Site fictif · données d&apos;illustration</p>
         </div>
@@ -78,7 +85,7 @@ export function AuditReport() {
         </dl>
 
         <div className="px-6 py-7 md:px-9 md:py-9">
-          <p className="text-xs tracking-[0.14em] text-faint uppercase">Corrections prioritaires</p>
+          <h4 className="text-xs tracking-[0.14em] text-faint uppercase">Corrections prioritaires</h4>
           <ol className="mt-5">
             {actions.map((a) => (
               <li

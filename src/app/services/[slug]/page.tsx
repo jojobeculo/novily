@@ -13,15 +13,37 @@ export function generateStaticParams() {
 
 const find = (slug: string) => services.find((s) => s.id === slug);
 
+/** Same text as src/app/opengraph-image.alt.txt, the image shared by every page. */
+const shareImageAlt = "Novéo — Nous concevons des expériences digitales qui marquent les esprits.";
+
 export async function generateMetadata({ params }: PageProps<"/services/[slug]">): Promise<Metadata> {
   const service = find((await params).slug);
   if (!service) return {};
   const url = `${siteConfig.url}${serviceHref(service)}`;
+  const title = `${service.title} — ${siteConfig.name}`;
+  const description = service.page.metaDescription;
+  // A page's openGraph replaces the layout's whole object, image included: restate it all.
+  const image = {
+    url: `${siteConfig.url}/opengraph-image.jpg`,
+    width: 1200,
+    height: 630,
+    type: "image/jpeg",
+    alt: shareImageAlt,
+  };
   return {
     title: service.title,
-    description: service.page.metaDescription,
+    description,
     alternates: { canonical: url },
-    openGraph: { url, title: `${service.title} — ${siteConfig.name}`, description: service.page.metaDescription },
+    openGraph: {
+      type: "website",
+      locale: siteConfig.locale,
+      siteName: siteConfig.name,
+      url,
+      title,
+      description,
+      images: [image],
+    },
+    twitter: { card: "summary_large_image", title, description, images: [image] },
   };
 }
 
