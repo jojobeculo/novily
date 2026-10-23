@@ -33,7 +33,7 @@ export function Hero() {
       >
         <div className={enter} style={delay(0.1)}>
           <p className="mb-8 text-eyebrow uppercase text-faint tall:mb-12">
-            Création de sites web sur mesure
+            Agence web — création de sites sur mesure
           </p>
         </div>
 

@@ -23,7 +23,19 @@ const graph = {
         addressRegion: "Auvergne-Rhône-Alpes",
         addressCountry: "FR",
       },
-      areaServed: { "@type": "Country", name: "France" },
+      areaServed: [
+        { "@type": "City", name: siteConfig.city },
+        { "@type": "Country", name: "France" },
+      ],
+      knowsAbout: [
+        "Création de sites web",
+        "Accessibilité numérique (RGAA, WCAG)",
+        "Conformité RGPD",
+        "Intelligence artificielle en entreprise",
+        "Marketing digital",
+        "Motion design",
+        "Référencement naturel (SEO)",
+      ],
       ...(siteConfig.socials.length > 0 ? { sameAs: siteConfig.socials.map((s) => s.href) } : {}),
       hasOfferCatalog: {
         "@type": "OfferCatalog",
@@ -40,6 +52,16 @@ const graph = {
             },
           })),
       },
+    },
+    {
+      "@type": "WebPage",
+      "@id": `${siteConfig.url}/`,
+      url: `${siteConfig.url}/`,
+      name: siteConfig.title,
+      description: siteConfig.description,
+      inLanguage: "fr-FR",
+      isPartOf: { "@id": `${siteConfig.url}/#website` },
+      about: { "@id": organizationId },
     },
     {
       "@type": "WebSite",

@@ -30,6 +30,7 @@ Copiez `.env.example` vers `.env.local` et renseignez les variables :
 | `NEXT_PUBLIC_SITE_URL` | URL publique, sous-chemin compris : liens canoniques, Open Graph, sitemap |
 | `NEXT_PUBLIC_BASE_PATH` | Sous-chemin du site (`/novily` sur GitHub Pages), vide avec un domaine personnalisé |
 | `NEXT_PUBLIC_CONTACT_ENDPOINT` | Facultatif : autre formulaire [Formspree](https://formspree.io) que celui du site (`https://formspree.io/f/mpppakvq`) |
+| `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` | Code de vérification Google Search Console (méthode « Balise HTML », valeur de `content` seule) |
 | `NEXT_PUBLIC_GA_ID` | Identifiant de mesure Google Analytics 4 (`G-XXXXXXXXXX`), vide pour ne rien mesurer |
 
 Le formulaire de contact envoie les demandes à Formspree, sans recharger la page. L'adresse qui
@@ -48,6 +49,10 @@ Le site est exporté en HTML statique (`output: "export"`) et publié par
 
 1. Dans **Settings → Pages**, choisissez **Source : GitHub Actions**.
 2. Optionnel : dans **Settings → Secrets and variables → Actions → Variables**, créez
+   `SITE_URL` avec l'adresse de votre domaine principal (ex. `https://votre-domaine.fr`) dès que
+   le site est en ligne chez OVHcloud : les liens canoniques et le sitemap de la copie GitHub
+   Pages désignent alors ce domaine, et Google ne voit pas deux sites concurrents.
+   `GOOGLE_SITE_VERIFICATION` pour Search Console,
    `CONTACT_ENDPOINT` pour utiliser un autre formulaire Formspree, et `GA_ID` avec votre
    identifiant Google Analytics.
 3. Poussez sur `main`. Le site est publié sur `https://<compte>.github.io/novily/`.

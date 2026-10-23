@@ -14,6 +14,8 @@ export type Service = {
   /** Also the address of the service page: /services/<id>/. */
   id: string;
   title: string;
+  /** Title of the page in search results and shares: the words people search for (≤ 52 characters, " — Novéo" follows). */
+  seoTitle: string;
   /** Part of the title set in italic periwinkle on the service page. */
   accent: string;
   /** Label under the progress bar of the 3D stage. */
@@ -49,6 +51,7 @@ export const services: readonly Service[] = [
   {
     id: "conception-site-web",
     title: "Conception de sites web",
+    seoTitle: "Création de site web sur mesure à Clermont-Ferrand",
     accent: "sites web",
     shortTitle: "Sites web",
     hook: "Le premier rendez-vous avec vos clients mérite la même exigence que votre métier.",
@@ -201,6 +204,7 @@ export const services: readonly Service[] = [
   {
     id: "accessibilite-conformite",
     title: "Accessibilité numérique et conformité",
+    seoTitle: "Audit d'accessibilité RGAA et conformité RGPD",
     accent: "conformité",
     shortTitle: "Conformité",
     hook: "La conformité ne se présume pas. Elle se vérifie, critère par critère.",
@@ -353,6 +357,7 @@ export const services: readonly Service[] = [
   {
     id: "transition-ia",
     title: "Transition IA pour les entreprises",
+    seoTitle: "Transition IA : intégrer l'IA dans votre entreprise",
     accent: "IA",
     shortTitle: "Transition IA",
     hook: "Une IA qui travaille dans vos outils, sur vos données, et dans les règles.",
@@ -505,6 +510,7 @@ export const services: readonly Service[] = [
   {
     id: "marketing-motion-design",
     title: "Marketing digital et motion design",
+    seoTitle: "Marketing digital et motion design à Clermont-Ferrand",
     accent: "motion design",
     shortTitle: "Marketing & motion",
     hook: "Des images qui retiennent l'attention, des campagnes qui se mesurent.",
@@ -651,6 +657,7 @@ export const services: readonly Service[] = [
   {
     id: "logiciels-sur-mesure",
     title: "Conception de logiciels professionnels sur mesure",
+    seoTitle: "Développement de logiciels métier sur mesure",
     accent: "sur mesure",
     shortTitle: "Logiciels métier",
     hook: "Bientôt : des logiciels taillés pour vos processus, pas l'inverse.",

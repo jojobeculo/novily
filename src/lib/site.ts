@@ -10,12 +10,15 @@ export const siteConfig = {
    * the HTML): the recipient address is set in the Formspree dashboard, never here.
    */
   contactEndpoint: process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "https://formspree.io/f/mpppakvq",
+  /** Google Search Console "HTML tag" verification code (the content of the meta tag). */
+  googleVerification: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? "",
   /** Google Analytics 4 measurement id (G-…). Empty: no analytics, no consent banner. */
   analyticsId: process.env.NEXT_PUBLIC_GA_ID ?? "",
   locale: "fr_FR",
-  title: "Novéo — Sites web, accessibilité et IA à Clermont-Ferrand",
+  // Search results show about 60 characters of title and 155 of description.
+  title: "Novéo — Agence web à Clermont-Ferrand : sites, IA, accessibilité",
   description:
-    "Studio digital basé à Clermont-Ferrand : conception de sites web, audits d'accessibilité et de conformité (RGPD, WCAG), transition IA et marketing digital, partout en France.",
+    "Agence web à Clermont-Ferrand : sites sur mesure, audits d'accessibilité et RGPD, intégration de l'IA et marketing digital, partout en France.",
   email: "novyli.digital@gmail.com",
   /** Where the studio is based, and the area it serves. */
   location: "Basé à Clermont-Ferrand — partout en France",

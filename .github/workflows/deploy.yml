@@ -44,7 +44,11 @@ jobs:
         env:
           # "/<repo>" on a project site, empty with a custom domain.
           NEXT_PUBLIC_BASE_PATH: ${{ steps.pages.outputs.base_path }}
-          NEXT_PUBLIC_SITE_URL: ${{ steps.pages.outputs.base_url }}
+          # The SITE_URL repository variable (e.g. https://votre-domaine.fr) points canonical
+          # links and the sitemap at the main domain, so this copy does not compete with it.
+          NEXT_PUBLIC_SITE_URL: ${{ vars.SITE_URL || steps.pages.outputs.base_url }}
+          # Optional: Google Search Console "HTML tag" verification code.
+          NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION: ${{ vars.GOOGLE_SITE_VERIFICATION }}
           # Optional: the CONTACT_ENDPOINT repository variable replaces the site's Formspree form.
           NEXT_PUBLIC_CONTACT_ENDPOINT: ${{ vars.CONTACT_ENDPOINT }}
           # Optional: Google Analytics 4 measurement id (G-…). Without it, no analytics and no cookie banner.

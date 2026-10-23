@@ -36,6 +36,8 @@ export const metadata: Metadata = {
   applicationName: siteConfig.name,
   keywords: [
     "agence web",
+    "agence web Clermont-Ferrand",
+    "création site internet Clermont-Ferrand",
     "studio digital",
     "création site internet",
     "site vitrine",
@@ -45,7 +47,6 @@ export const metadata: Metadata = {
     "intégration intelligence artificielle entreprise",
     "motion design",
     "design web haut de gamme",
-    "agence web Clermont-Ferrand",
     "agence web France",
     "SEO",
   ],
@@ -71,6 +72,7 @@ export const metadata: Metadata = {
     googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   formatDetection: { telephone: false, email: false, address: false },
+  ...(siteConfig.googleVerification ? { verification: { google: siteConfig.googleVerification } } : {}),
 };
 
 export const viewport: Viewport = {

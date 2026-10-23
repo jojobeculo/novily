@@ -20,7 +20,7 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
   const service = find((await params).slug);
   if (!service) return {};
   const url = `${siteConfig.url}${serviceHref(service)}`;
-  const title = `${service.title} — ${siteConfig.name}`;
+  const title = `${service.seoTitle} — ${siteConfig.name}`;
   const description = service.page.metaDescription;
   // A page's openGraph replaces the layout's whole object, image included: restate it all.
   const image = {
@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/services/[slug]">
     alt: shareImageAlt,
   };
   return {
-    title: service.title,
+    title: service.seoTitle,
     description,
     alternates: { canonical: url },
     openGraph: {
@@ -60,10 +60,24 @@ export default async function ServicePage({ params }: PageProps<"/services/[slug
         "@type": "Service",
         "@id": `${url}#service`,
         name: service.title,
+        serviceType: service.seoTitle,
         description: service.page.metaDescription,
         url,
         provider: { "@id": `${siteConfig.url}/#organization` },
-        areaServed: { "@type": "Country", name: "France" },
+        areaServed: [
+          { "@type": "City", name: siteConfig.city },
+          { "@type": "Country", name: "France" },
+        ],
+      },
+      {
+        "@type": "WebPage",
+        "@id": url,
+        url,
+        name: `${service.seoTitle} — ${siteConfig.name}`,
+        description: service.page.metaDescription,
+        inLanguage: "fr-FR",
+        isPartOf: { "@id": `${siteConfig.url}/#website` },
+        about: { "@id": `${url}#service` },
       },
       {
         "@type": "BreadcrumbList",
