@@ -43,7 +43,8 @@ mettez jamais une clé secrète (clé d'API privée, mot de passe). Le site n'en
 ## Déploiement sur GitHub Pages
 
 Le site est exporté en HTML statique (`output: "export"`) et publié par
-`.github/workflows/deploy.yml` à chaque push sur `main` (ou à la main depuis l'onglet Actions).
+`.github/workflows/deploy.yml` à chaque push sur `main` ou sur la branche de développement
+`claude/tender-tesla-anxi5f` (ou à la main depuis l'onglet Actions).
 
 1. Dans **Settings → Pages**, choisissez **Source : GitHub Actions**.
 2. Optionnel : dans **Settings → Secrets and variables → Actions → Variables**, créez
